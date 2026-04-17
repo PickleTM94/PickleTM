@@ -1,4 +1,4 @@
-User-agent: *
+User-agent : *
 Allow: /
 
 Sitemap: https://pickletm94.github.io/PickleTM/sitemap.xml
