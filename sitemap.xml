@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
-    <loc>https://pickletm94.github.io/PickleTM//</loc>
-    <lastmod>2025-06-01</lastmod>
+    <loc>https://pickletm94.github.io/PickleTM/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
+
   <url>
-    <loc>https://pickletm94.github.io/PickleTM//homologation-fft-pickleball.html</loc>
-    <lastmod>2025-06-01</lastmod>
+    <loc>https://pickletm94.github.io/PickleTM/homologation-fft-pickleball.html</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://pickletm94.github.io/PickleTM//export-dupr-pickleball.html</loc>
-    <lastmod>2025-06-01</lastmod>
+    <loc>https://pickletm94.github.io/PickleTM/export-dupr-pickleball.html</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://pickletm94.github.io/PickleTM//formats-tournoi-pickleball.html</loc>
-    <lastmod>2025-06-01</lastmod>
+    <loc>https://pickletm94.github.io/PickleTM/formats-tournoi-pickleball.html</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.8</priority>
   </url>
+
 </urlset>
