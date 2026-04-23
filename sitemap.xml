@@ -2,25 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://pickletm94.github.io/PickleTM/</loc>
+    <loc>https://pickletm.fr/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://pickletm94.github.io/PickleTM/homologation-fft-pickleball.html</loc>
+    <loc>https://pickletm.fr/homologation-fft-pickleball.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://pickletm94.github.io/PickleTM/export-dupr-pickleball.html</loc>
+    <loc>https://pickletm.fr/export-dupr-pickleball.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://pickletm94.github.io/PickleTM/formats-tournoi-pickleball.html</loc>
+    <loc>https://pickletm.fr/formats-tournoi-pickleball.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
