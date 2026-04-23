@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pickletm94.github.io/PickleTM/sitemap.xml
+Sitemap: https://pickletm.fr/sitemap.xml
 
 # Block common bots that waste crawl budget
 User-agent: AhrefsBot
