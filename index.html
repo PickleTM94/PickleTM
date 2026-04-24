@@ -164,7 +164,7 @@
       --card2:   #0d1a2e;
       --border:  rgba(30,144,255,0.18);
       --text:    #e8f0ff;
-      --muted:   #7a90b8;
+      --muted:   #b6c6da;
       --green:   #00e676;
     }
 
@@ -1404,8 +1404,12 @@
     <div class="tab-switcher">
       <div class="tab-pill active" onclick="showTab('accueil')">🏠 Accueil</div>
       <div class="tab-pill" onclick="showTab('scores')">🎯 Tournoi</div>
+      <div class="tab-pill" onclick="showTab('joueurs')">👤 Joueurs</div>
       <div class="tab-pill" onclick="showTab('classement')">🥇 Classement</div>
       <div class="tab-pill" onclick="showTab('programme')">📅 Programme</div>
+      <div class="tab-pill" onclick="showTab('bareme')">🏓 Barème FFT</div>
+      <div class="tab-pill" onclick="showTab('parametres')">⚙️ Paramètres</div>
+      <div class="tab-pill" onclick="showTab('aide')">❓ Aide</div>
     </div>
 
     <div class="tab-panels">
@@ -1419,7 +1423,7 @@
           <div class="mock-config">
             <div class="mock-field">
               <label>Nom de l'événement</label>
-              <div class="mock-input">Open Régional Pickleball 2025</div>
+              <div class="mock-input">Open Régional Pickleball 2026</div>
             </div>
             <div class="mock-field">
               <label>Date</label>
@@ -3215,6 +3219,42 @@
             </div>
           </div>
 
+        </div>
+      </div>
+
+      <!-- JOUEURS -->
+      <div class="panel" id="panel-joueurs">
+        <div class="mock-home" style="min-height:320px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;opacity:.55">
+          <div style="font-size:3rem">👤</div>
+          <div style="font-family:'Exo 2',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text)">Gestion des joueurs</div>
+          <div style="font-size:.9rem;color:var(--muted);text-align:center;max-width:320px">Idenfication des Joueurs, Gestion des poules</div>
+        </div>
+      </div>
+
+      <!-- BARÈME FFT -->
+      <div class="panel" id="panel-bareme">
+        <div class="mock-home" style="min-height:320px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;opacity:.55">
+          <div style="font-size:3rem">🏓</div>
+          <div style="font-family:'Exo 2',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text)">Barème FFT</div>
+          <div style="font-size:.9rem;color:var(--muted);text-align:center;max-width:320px">Barèmes K25 / K100 / K250 / K500 intégrés.</div>
+        </div>
+      </div>
+
+      <!-- PARAMÈTRES -->
+      <div class="panel" id="panel-parametres">
+        <div class="mock-home" style="min-height:320px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;opacity:.55">
+          <div style="font-size:3rem">⚙️</div>
+          <div style="font-family:'Exo 2',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text)">Paramètres</div>
+          <div style="font-size:.9rem;color:var(--muted);text-align:center;max-width:320px">Configuration du tournoi si mauvaise déclaration au départ</div>
+        </div>
+      </div>
+
+      <!-- AIDE -->
+      <div class="panel" id="panel-aide">
+        <div class="mock-home" style="min-height:320px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;opacity:.55">
+          <div style="font-size:3rem">❓</div>
+          <div style="font-family:'Exo 2',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text)">Aide</div>
+          <div style="font-size:.9rem;color:var(--muted);text-align:center;max-width:320px">Guide d'utilisation et FAQ intégrés à l'application.</div>
         </div>
       </div>
 
