@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Les mots du développeur — PickleTM</title>
+  <meta name="description" content="L'histoire derrière PickleTM : comment un développeur passionné de pickleball a conçu un logiciel de gestion de tournois 100% hors ligne."/>
+  <meta name="author" content="PickleTM"/>
+  <link rel="canonical" href="https://pickletm.fr/a-propos"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;900&family=Barlow+Condensed:wght@400;600;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --blue:    #1e90ff;
+      --blue2:   #0066dd;
+      --yellow:  #ffd700;
+      --yellow2: #ffb300;
+      --dark:    #080c14;
+      --dark2:   #0d1422;
+      --dark3:   #111928;
+      --card:    #111928;
+      --card2:   #0d1a2e;
+      --border:  rgba(30,144,255,0.18);
+      --text:    #e8f0ff;
+      --muted:   #7a90b8;
+      --green:   #00e676;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* NOISE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: 0.4;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 68px;
+      background: rgba(8,12,20,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo img { height: 42px; }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem; font-weight: 600; letter-spacing: 1px;
+      color: var(--muted); text-decoration: none;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-links a.active { color: var(--yellow); }
+    .nav-cta {
+      background: var(--blue); color: white !important;
+      padding: 8px 22px; border-radius: 6px;
+      transition: background .2s !important;
+    }
+    .nav-cta:hover { background: var(--blue2) !important; }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      min-height: 52vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 130px 5vw 70px;
+      overflow: hidden;
+      text-align: center;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: -200px; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 700px;
+      background: radial-gradient(ellipse, rgba(30,144,255,0.18) 0%, transparent 65%),
+                  radial-gradient(ellipse 500px 300px at 70% 70%, rgba(255,215,0,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .85rem; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--yellow);
+      background: rgba(255,215,0,0.1);
+      border: 1px solid rgba(255,215,0,0.3);
+      padding: 5px 16px; border-radius: 100px;
+      margin-bottom: 20px;
+      animation: fadeUp .7s ease both;
+    }
+    .hero h1 {
+      font-family: 'Exo 2', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      animation: fadeUp .7s .1s ease both;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--blue), var(--yellow));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.7;
+      animation: fadeUp .7s .2s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SECTION */
+    .section {
+      padding: 80px 5vw;
+      position: relative; z-index: 1;
+    }
+    .section-tag {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .8rem; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--blue);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Exo 2', sans-serif;
+      font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+      font-weight: 900; line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .section-title em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--blue), var(--yellow));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .sep {
+      display: block;
+      width: 56px; height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--yellow));
+      border-radius: 2px;
+      margin: 18px auto 0;
+    }
+
+    /* CONTENT LAYOUT */
+    .content-wrap {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    /* INTRO CARD */
+    .intro-card {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--blue);
+      border-radius: 14px;
+      padding: 36px 40px;
+      margin-bottom: 56px;
+      position: relative;
+      overflow: hidden;
+    }
+    .intro-card::before {
+      content: '"';
+      position: absolute;
+      top: -10px; left: 24px;
+      font-size: 8rem;
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 900;
+      color: rgba(30,144,255,0.08);
+      line-height: 1;
+      pointer-events: none;
+    }
+    .intro-card p {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: var(--text);
+      position: relative;
+    }
+
+    /* STORY BLOCKS */
+    .story-block {
+      margin-bottom: 52px;
+    }
+    .story-block-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .story-icon {
+      width: 46px; height: 46px;
+      background: linear-gradient(135deg, rgba(30,144,255,0.18), rgba(30,144,255,0.08));
+      border: 1px solid rgba(30,144,255,0.3);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .story-block h2 {
+      font-family: 'Exo 2', sans-serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.55rem);
+      font-weight: 700;
+    }
+    .story-block p {
+      font-size: 1.02rem;
+      line-height: 1.8;
+      color: #c0ceea;
+      margin-bottom: 14px;
+    }
+
+    /* VALUE CARDS GRID */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 36px;
+    }
+    .value-card {
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px 22px;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+    }
+    .value-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--blue);
+      box-shadow: 0 12px 32px rgba(30,144,255,0.15);
+    }
+    .value-card .vc-icon {
+      font-size: 1.7rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .value-card .vc-title {
+      font-family: 'Exo 2', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .value-card .vc-desc {
+      font-size: .9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* HIGHLIGHT BOX */
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(30,144,255,0.1), rgba(255,215,0,0.05));
+      border: 1px solid rgba(30,144,255,0.25);
+      border-radius: 14px;
+      padding: 32px 36px;
+      margin: 40px 0;
+      text-align: center;
+    }
+    .highlight-box p {
+      font-family: 'Exo 2', sans-serif;
+      font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+      font-weight: 600;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    .highlight-box p span {
+      background: linear-gradient(135deg, var(--blue), var(--yellow));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    /* FEATURES LIST */
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 1rem;
+      color: #c0ceea;
+      line-height: 1.6;
+    }
+    .feature-list li::before {
+      content: '→';
+      color: var(--blue);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* RELIABILITY LIST */
+    .reliability-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 18px 0;
+    }
+    .reliability-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1rem;
+      color: #c0ceea;
+      line-height: 1.5;
+    }
+    .rl-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0,230,118,0.1);
+      border: 1px solid rgba(0,230,118,0.25);
+      color: var(--green);
+      font-size: .78rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      letter-spacing: .5px;
+      padding: 3px 10px;
+      border-radius: 100px;
+      flex-shrink: 0;
+    }
+
+    /* DIVIDER */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 60px 0;
+    }
+
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      padding: 80px 5vw;
+      background: var(--dark2);
+      position: relative; z-index: 1;
+    }
+    .cta-section h2 {
+      font-family: 'Exo 2', sans-serif;
+      font-size: clamp(1.7rem, 4vw, 2.8rem);
+      font-weight: 900;
+      margin-bottom: 18px;
+    }
+    .cta-section p {
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 36px;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      color: white; font-family: 'Exo 2', sans-serif;
+      font-size: 1.05rem; font-weight: 700;
+      padding: 14px 32px; border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 8px 32px rgba(30,144,255,0.35);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(30,144,255,0.5); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: transparent;
+      color: var(--text); font-family: 'Exo 2', sans-serif;
+      font-size: 1.05rem; font-weight: 600;
+      padding: 13px 28px; border-radius: 8px;
+      text-decoration: none;
+      border: 1.5px solid var(--border);
+      transition: border-color .2s, color .2s;
+    }
+    .btn-secondary:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 36px 5vw;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .88rem;
+      position: relative; z-index: 1;
+    }
+    footer img {
+      height: 32px;
+      margin-bottom: 12px;
+      opacity: .7;
+    }
+    footer p { margin-bottom: 4px; }
+
+    /* SCROLL REVEAL */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* MOBILE */
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .intro-card { padding: 24px 22px; }
+      .highlight-box { padding: 24px 20px; }
+      .values-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav role="navigation" aria-label="Navigation principale">
+  <div class="nav-logo">
+    <a href="index.html"><img src="PickleTM_logo.png" alt="PickleTM"></a>
+  </div>
+  <div class="nav-links">
+    <a href="index.html#formats">Formats</a>
+    <a href="index.html#apercu">Aperçu</a>
+    <a href="index.html#fonctionnalites">Fonctionnalités</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="a-propos.html" class="active">À propos</a>
+    <a href="index.html#contact" class="nav-cta">Obtenir l'app</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">🏓 Le projet</div>
+  <h1>Les mots du <span>développeur</span></h1>
+  <p class="hero-sub">L'histoire derrière PickleTM, née d'une passion pour le pickleball et d'un problème concret rencontré sur le terrain.</p>
+</section>
+
+<!-- CONTENT -->
+<section class="section" style="background: var(--dark2);">
+  <div class="content-wrap">
+
+    <!-- Intro quote -->
+    <div class="intro-card reveal">
+      <p>Je suis développeur, mais aussi joueur actif de pickleball, engagé régulièrement en tournoi depuis plusieurs mois. C'est justement sur le terrain qu'est née l'idée de PickleTM.</p>
+    </div>
+
+    <!-- BLOCK 1 : Origine -->
+    <div class="story-block reveal">
+      <div class="story-block-header">
+        <div class="story-icon">💡</div>
+        <h2>Un constat sur le terrain</h2>
+      </div>
+      <p>
+        En participant à différents tournois, j'ai été surpris de constater que beaucoup d'organisations reposaient encore sur des systèmes papier ou des outils peu adaptés : feuilles imprimées, tableaux à la main, gestion complexe des résultats… Des méthodes qui fonctionnent, mais qui deviennent vite limitées dès que le nombre d'équipes augmente.
+      </p>
+      <p>
+        En tant que développeur, j'ai naturellement commencé à chercher des solutions existantes. Certaines sont déjà très bien conçues, notamment pour la gestion de tournois en ligne. Mais un problème revenait systématiquement : <strong>la dépendance à internet</strong>.
+      </p>
+      <p>
+        Or, dans de nombreux clubs ou lors d'événements sportifs, la connexion réseau est instable, voire inexistante. Cela peut vite devenir un frein majeur pour les organisateurs.
+      </p>
+
+      <div class="highlight-box">
+        <p>C'est là qu'est née l'idée de PickleTM : <span>proposer une alternative différente.</span></p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- BLOCK 2 : Solution -->
+    <div class="story-block reveal">
+      <div class="story-block-header">
+        <div class="story-icon">⚙️</div>
+        <h2>Un logiciel pensé pour les conditions réelles</h2>
+      </div>
+      <p>
+        PickleTM est un logiciel de gestion de tournois de pickleball conçu pour fonctionner <strong>100% hors ligne</strong>. L'objectif est simple : permettre aux organisateurs de créer, gérer et piloter un tournoi sans dépendre d'une connexion internet.
+      </p>
+      <p>Que ce soit pour :</p>
+      <ul class="feature-list">
+        <li>gérer des poules automatiquement</li>
+        <li>générer des tableaux à élimination directe</li>
+        <li>organiser le programme des matchs</li>
+        <li>préparer les exports FFT et DUPR</li>
+      </ul>
+      <p>… tout est accessible directement depuis l'application, même sans connexion.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- BLOCK 3 : Terrain avant tout -->
+    <div class="story-block reveal">
+      <div class="story-block-header">
+        <div class="story-icon">🎯</div>
+        <h2>Une approche terrain avant tout</h2>
+      </div>
+      <p>
+        PickleTM n'a pas été conçu uniquement derrière un écran. Il est le résultat d'une expérience concrète sur le terrain, au contact des joueurs et des organisateurs. Chaque fonctionnalité a été pensée pour répondre à des besoins réels :
+      </p>
+
+      <div class="values-grid">
+        <div class="value-card">
+          <span class="vc-icon">⚡</span>
+          <div class="vc-title">Gagner du temps</div>
+          <div class="vc-desc">Mise en place rapide, sans configuration complexe. Quelques clics suffisent pour lancer un tournoi.</div>
+        </div>
+        <div class="value-card">
+          <span class="vc-icon">🛡️</span>
+          <div class="vc-title">Limiter les erreurs</div>
+          <div class="vc-desc">Classements automatiques, départage géré, alertes visuelles en cas d'égalité. Moins d'intervention manuelle.</div>
+        </div>
+        <div class="value-card">
+          <span class="vc-icon">📋</span>
+          <div class="vc-title">Simplifier la lecture</div>
+          <div class="vc-desc">Résultats clairs, lisibles et exportables. Les joueurs et organisateurs voient l'essentiel en un coup d'œil.</div>
+        </div>
+        <div class="value-card">
+          <span class="vc-icon">🔄</span>
+          <div class="vc-title">Fluidifier l'organisation</div>
+          <div class="vc-desc">Du premier match au classement final, tout s'enchaîne naturellement sans ressaisie ni jonglage entre outils.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- BLOCK 4 : Pourquoi différent -->
+    <div class="story-block reveal">
+      <div class="story-block-header">
+        <div class="story-icon">🌐</div>
+        <h2>Pourquoi PickleTM est différent</h2>
+      </div>
+      <p>
+        Là où beaucoup de solutions misent sur le tout en ligne, PickleTM fait un choix assumé : <strong>la fiabilité avant tout</strong>.
+      </p>
+
+      <ul class="reliability-list">
+        <li>
+          <span class="rl-badge">✓ Hors ligne</span>
+          Aucun risque lié à une coupure internet
+        </li>
+        <li>
+          <span class="rl-badge">✓ Rapide</span>
+          Aucune latence, tout s'exécute en local
+        </li>
+        <li>
+          <span class="rl-badge">✓ Stable</span>
+          Un fonctionnement fiable en toutes conditions
+        </li>
+      </ul>
+
+      <p style="margin-top: 20px;">
+        C'est une solution simple, rapide et efficace pour organiser des tournois de pickleball, même dans des environnements contraints.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- BLOCK 5 : Évolution -->
+    <div class="story-block reveal">
+      <div class="story-block-header">
+        <div class="story-icon">🚀</div>
+        <h2>Une évolution continue</h2>
+      </div>
+      <p>
+        PickleTM continue d'évoluer grâce aux retours des joueurs et des organisateurs. L'objectif reste le même : proposer un outil toujours plus adapté aux besoins du terrain, tout en restant simple à utiliser.
+      </p>
+
+      <div class="highlight-box" style="margin-top: 28px;">
+        <p>PickleTM, c'est avant tout un projet né d'une <span>passion pour le pickleball</span> et d'une volonté d'améliorer concrètement l'organisation des tournois.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact" aria-label="Obtenir PickleTM">
+  <h2>Prêt à gérer votre <span style="background:linear-gradient(135deg,#1e90ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent">prochain tournoi ?</span></h2>
+  <p>Contactez-nous pour obtenir votre licence PickleTM et commencer à organiser des tournois de pickleball professionnels dès aujourd'hui.</p>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
+    <a href="mailto:PickleTM94@gmail.com" class="btn-primary">✉️ Nous contacter</a>
+    <a href="index.html" class="btn-secondary">← Retour à l'accueil</a>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <img src="PickleTM_logo.png" alt="PickleTM">
+  <p>© 2026 PickleTM — Logiciel de gestion de tournois Pickleball</p>
+  <p style="font-size:.75rem">Conçu pour les organisateurs passionnés 🏓</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
