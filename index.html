@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="icon" href="/favicon.png" type="image/png">
   <!-- ═══ SEO PRIMAIRE ═══ -->
   <title>Logiciel tournoi pickleball (FFT & DUPR) — PickleTM</title>
   <meta name="description" content="Logiciel simple pour organiser un tournoi de pickleball : poules, tableaux, FFT et export DUPR. Fonctionne hors ligne sur Windows et Mac."/>  <meta name="author" content="PickleTM"/>
@@ -165,7 +164,7 @@
       --card2:   #0d1a2e;
       --border:  rgba(30,144,255,0.18);
       --text:    #e8f0ff;
-      --muted:   #b6c6da;
+      --muted:   #7a90b8;
       --green:   #00e676;
     }
 
@@ -1189,14 +1188,13 @@
 <!-- NAV -->
 <nav role="navigation" aria-label="Navigation principale">
   <div class="nav-logo">
-    <img src="PickleTM_logo.png" alt="PickleTM — logiciel de gestion de tournois de pickleball">
+    <img src="PickleTM_logo.png" alt="PickleTM">
   </div>
   <div class="nav-links">
     <a href="#formats">Formats</a>
     <a href="#apercu">Aperçu</a>
     <a href="#fonctionnalites">Fonctionnalités</a>
     <a href="#faq">FAQ</a>
-    <a href="tarifs.html">Tarifs</a>
     <a href="#contact" class="nav-cta">Obtenir l'app</a>
   </div>
 </nav>
@@ -1204,10 +1202,10 @@
 <main id="main-content">
 <!-- HERO -->
 <section class="hero">
-  <img src="PickleTM_logo.png" alt="PickleTM — logiciel d'organisation de tournois de pickleball" class="hero-logo">
+  <img src="PickleTM_logo.png" alt="PickleTM — logiciel de gestion de tournois de pickleball" class="hero-logo">
   
   <!-- <h1>La gestion de tournois de<br><span>Pickleball sans effort</span></h1> -->
-  <h1>Logiciel pour organiser un tournoi de pickleball<br><span>gestion simple et complète</span></h1>
+  <h1>Logiciel tournoi pickleball — <br><span>gestion simple et complète</span></h1>
 
   <p class="hero-sub">
     PickleTM est un outil simple où tout est automatisé, fonctionne offline (sans reseau internet).
@@ -1251,7 +1249,7 @@
       Organiser un tournoi de pickleball peut rapidement devenir complexe : gestion des poules, calcul des classements, création des tableaux à élimination. PickleTM simplifie entièrement ce processus grâce à une solution dédiée aux organisateurs.
     </p>
     <p style="color:var(--muted);font-size:1.05rem;line-height:1.8">
-      Que vous organisiez un tournoi amateur ou homologué FFT (K25, K100, K250, K500), le logiciel gère les matchs, résultats, classement et programmation en quelques clics — et fonctionne 100 % hors ligne sur Windows et Mac.
+      Que vous organisiez un tournoi amateur ou homologué FFT (K25, K100, K250, K500), le logiciel gère les inscriptions, les matchs et les résultats en quelques clics — et fonctionne 100 % hors ligne sur Windows et Mac.
     </p>
   </div>
 </section>
@@ -1405,12 +1403,8 @@
     <div class="tab-switcher">
       <div class="tab-pill active" onclick="showTab('accueil')">🏠 Accueil</div>
       <div class="tab-pill" onclick="showTab('scores')">🎯 Tournoi</div>
-      <div class="tab-pill" onclick="showTab('joueurs')">👤 Joueurs</div>
       <div class="tab-pill" onclick="showTab('classement')">🥇 Classement</div>
       <div class="tab-pill" onclick="showTab('programme')">📅 Programme</div>
-      <div class="tab-pill" onclick="showTab('bareme')">🏓 Barème FFT</div>
-      <div class="tab-pill" onclick="showTab('parametres')">⚙️ Paramètres</div>
-      <div class="tab-pill" onclick="showTab('aide')">❓ Aide</div>
     </div>
 
     <div class="tab-panels">
@@ -1424,7 +1418,7 @@
           <div class="mock-config">
             <div class="mock-field">
               <label>Nom de l'événement</label>
-              <div class="mock-input">Open Régional Pickleball 2026</div>
+              <div class="mock-input">Open Régional Pickleball 2025</div>
             </div>
             <div class="mock-field">
               <label>Date</label>
@@ -3223,42 +3217,6 @@
         </div>
       </div>
 
-      <!-- JOUEURS -->
-      <div class="panel" id="panel-joueurs">
-        <div class="mock-home" style="min-height:320px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;opacity:.55">
-          <div style="font-size:3rem">👤</div>
-          <div style="font-family:'Exo 2',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text)">Gestion des joueurs</div>
-          <div style="font-size:.9rem;color:var(--muted);text-align:center;max-width:320px">Idenfication des Joueurs, Gestion des poules</div>
-        </div>
-      </div>
-
-      <!-- BARÈME FFT -->
-      <div class="panel" id="panel-bareme">
-        <div class="mock-home" style="min-height:320px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;opacity:.55">
-          <div style="font-size:3rem">🏓</div>
-          <div style="font-family:'Exo 2',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text)">Barème FFT</div>
-          <div style="font-size:.9rem;color:var(--muted);text-align:center;max-width:320px">Barèmes K25 / K100 / K250 / K500 intégrés.</div>
-        </div>
-      </div>
-
-      <!-- PARAMÈTRES -->
-      <div class="panel" id="panel-parametres">
-        <div class="mock-home" style="min-height:320px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;opacity:.55">
-          <div style="font-size:3rem">⚙️</div>
-          <div style="font-family:'Exo 2',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text)">Paramètres</div>
-          <div style="font-size:.9rem;color:var(--muted);text-align:center;max-width:320px">Configuration du tournoi si mauvaise déclaration au départ</div>
-        </div>
-      </div>
-
-      <!-- AIDE -->
-      <div class="panel" id="panel-aide">
-        <div class="mock-home" style="min-height:320px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;opacity:.55">
-          <div style="font-size:3rem">❓</div>
-          <div style="font-family:'Exo 2',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text)">Aide</div>
-          <div style="font-size:.9rem;color:var(--muted);text-align:center;max-width:320px">Guide d'utilisation et FAQ intégrés à l'application.</div>
-        </div>
-      </div>
-
     </div><!-- /tab-panels -->
   </div><!-- /tabs-demo -->
 </section>
@@ -3294,7 +3252,7 @@
     </div>
 
     <div class="feature-card reveal">
-      <span class="feature-icon">🏓</span>
+      <span class="feature-icon">🇫🇷</span>
       <div class="feature-title">Homologation FFT intégrée</div>
       <div class="feature-desc">Barème officiel FFT intégré pour K25, K100, K250 et K500. Calcul automatique des points par équipe selon leur classement final. Export simplifié pour etre intégré au template FFT.</div>
       <div class="feature-tags">
@@ -3423,7 +3381,7 @@
   </div>
   <div class="seo-guides-grid reveal">
     <a href="homologation-fft-pickleball.html" class="seo-guide-card">
-      <div class="seo-guide-icon">🏓</div>
+      <div class="seo-guide-icon">🇫🇷</div>
       <div class="seo-guide-title">Homologation FFT pickleball</div>
       <div class="seo-guide-desc">Barèmes K25 à K500, catégories officielles, export automatique. Tout ce qu'il faut savoir pour organiser un tournoi homologué FFT.</div>
       <div class="seo-guide-cta">Lire le guide →</div>
@@ -3504,37 +3462,37 @@
     </article>
 
     <!-- BLOC 4 : Formats détaillés -->
-    <!-- <article class="seo-article" id="formats-tournoi-details"> -->
-      <!-- <h2>Formats de tournois pickleball : guide complet pour organisateurs</h2> -->
-      <!-- <p>Le choix du format de tournoi est l'une des décisions les plus importantes pour un organisateur de compétition pickleball. Un mauvais format peut entraîner des déséquilibres sportifs, un planning surchargé ou des équipes qui ne jouent pas assez. c'est pour cela que ces 8 formules ont été retenues.</p> -->
+    <article class="seo-article" id="formats-tournoi-details">
+      <h2>Formats de tournois pickleball : guide complet pour organisateurs</h2>
+      <p>Le choix du format de tournoi est l'une des décisions les plus importantes pour un organisateur de compétition pickleball. Un mauvais format peut entraîner des déséquilibres sportifs, un planning surchargé ou des équipes qui ne jouent pas assez. c'est pour cela que ces 8 formules ont été retenues.</p>
 
-      <!-- <h3>Tournoi pickleball 6 équipes : le format 1 poule de 6</h3> -->
-      <!-- <p>Pour une compétition entre 6 équipes, le format une poule de six en round-robin complet est idéal. Chaque équipe affronte toutes les autres (5 matchs par équipe en phase de poules), ce qui garantit un classement fiable. La phase finale (demi-finales, finale, 3e place et match de classement 5e/6e) ajoute 5 matchs pour un total de 20 matchs sur la journée. Ce format convient parfaitement aux tournois de club avec peu de terrains.</p> -->
+      <h3>Tournoi pickleball 6 équipes : le format 1 poule de 6</h3>
+      <p>Pour une compétition entre 6 équipes, le format une poule de six en round-robin complet est idéal. Chaque équipe affronte toutes les autres (5 matchs par équipe en phase de poules), ce qui garantit un classement fiable. La phase finale (demi-finales, finale, 3e place et match de classement 5e/6e) ajoute 5 matchs pour un total de 20 matchs sur la journée. Ce format convient parfaitement aux tournois de club avec peu de terrains.</p>
 
-      <!-- <h3>Tournoi pickleball 8 équipes : le format 2 poules de 4</h3> -->
-      <!-- <p>Avec 8 équipes réparties en 2 poules de 4, chaque équipe joue 3 matchs de poule avant d'accéder aux phases finales. Les 2 premiers de chaque poule jouent les demi-finales croisées. Un tableau consolante permet aux équipes éliminées en poule de continuer à jouer pour les places 5 à 8. Ce format garantit un minimum de 5 matchs par équipe.</p> -->
+      <h3>Tournoi pickleball 8 équipes : le format 2 poules de 4</h3>
+      <p>Avec 8 équipes réparties en 2 poules de 4, chaque équipe joue 3 matchs de poule avant d'accéder aux phases finales. Les 2 premiers de chaque poule jouent les demi-finales croisées. Un tableau consolante permet aux équipes éliminées en poule de continuer à jouer pour les places 5 à 8. Ce format garantit un minimum de 5 matchs par équipe.</p>
 
-      <!-- <h3>Tournoi pickleball 8 équipes : le format 2+ poules de 4</h3> -->
-      <!-- <p>Avec 8 équipes réparties en 2 poules de 4, chaque équipe joue 3 matchs de poule. Puis toutes les equipes sont reverséés dans le tableau principales en quart de finale, puis match de classement. Ce format garantit un minimum de 6 matchs par équipe.</p> -->
+      <h3>Tournoi pickleball 8 équipes : le format 2+ poules de 4</h3>
+      <p>Avec 8 équipes réparties en 2 poules de 4, chaque équipe joue 3 matchs de poule. Puis toutes les equipes sont reverséés dans le tableau principales en quart de finale, puis match de classement. Ce format garantit un minimum de 6 matchs par équipe.</p>
  
-      <!-- <h3>Tournoi pickleball 12 équipes : le format 2 poule de 6</h3> -->
-      <!-- <p>Pour une compétition entre 12 équipes, le format avec deux poules de six est idéal. À l’issue des poules, les quatre premiers de chaque poule se rencontrent en quarts de finale, puis en demi-finales et en finale. Les deux derniers de chaque groupe se rencontrent dans un tableau de consolante.</p> -->
+      <h3>Tournoi pickleball 12 équipes : le format 2 poule de 6</h3>
+      <p>Pour une compétition entre 12 équipes, le format avec deux poules de six est idéal. À l’issue des poules, les quatre premiers de chaque poule se rencontrent en quarts de finale, puis en demi-finales et en finale. Les deux derniers de chaque groupe se rencontrent dans un tableau de consolante.</p>
 
-      <!-- <h3>Tournoi pickleball 16 équipes : le format 4 poules de 4</h3> -->
-      <!-- <p>C'est le format le plus populaire pour les tournois régionaux. 16 équipes en 4 poules de 4 avec phase de poules (3 matchs), quarts de finale, demi-finales, finale et un tableau consolante pour les équipes éliminées. 36 matchs au total, idéal pour une journée complète sur 4 terrains. Chaque équipe est garantie de jouer entre 5 et 7 matchs selon son parcours.</p> -->
+      <h3>Tournoi pickleball 16 équipes : le format 4 poules de 4</h3>
+      <p>C'est le format le plus populaire pour les tournois régionaux. 16 équipes en 4 poules de 4 avec phase de poules (3 matchs), quarts de finale, demi-finales, finale et un tableau consolante pour les équipes éliminées. 36 matchs au total, idéal pour une journée complète sur 4 terrains. Chaque équipe est garantie de jouer entre 5 et 7 matchs selon son parcours.</p>
 
-      <!-- <h3>Tournoi pickleball 24 équipes : le format 6 poules de 4</h3> -->
-      <!-- <p>Pour les grandes compétitions, le format 6 poules de 4 permet d'accueillir 24 équipes. La qualification pour les huitièmes de finale se fait via un système mixte : les 2 premiers de chaque poule (12 équipes) plus les 4 meilleurs 3es sont qualifiés. Ce système de meilleurs 3es, géré automatiquement par PickleTM, évite les inégalités entre poules et assure le meilleur niveau sportif en phase finale.</p> -->
+      <h3>Tournoi pickleball 24 équipes : le format 6 poules de 4</h3>
+      <p>Pour les grandes compétitions, le format 6 poules de 4 permet d'accueillir 24 équipes. La qualification pour les huitièmes de finale se fait via un système mixte : les 2 premiers de chaque poule (12 équipes) plus les 4 meilleurs 3es sont qualifiés. Ce système de meilleurs 3es, géré automatiquement par PickleTM, évite les inégalités entre poules et assure le meilleur niveau sportif en phase finale.</p>
 
-      <!-- <h3>Tournoi pickleball 28 équipes : le format 7 poules de 4</h3> -->
-      <!-- <p>Ce format de 7 poules de 4 permet d'accueillir 24 équipes. les deux premiers de chaque poules et les deux meilleurs troisièmes se rencontrent en 8eme de finales, 1/4, 1/2, finale. Toutes les autres équipes sont reversées pour un tableau consolante (place 17 à 28).</p> -->
+      <h3>Tournoi pickleball 28 équipes : le format 7 poules de 4</h3>
+      <p>Ce format de 7 poules de 4 permet d'accueillir 24 équipes. les deux premiers de chaque poules et les deux meilleurs troisièmes se rencontrent en 8eme de finales, 1/4, 1/2, finale. Toutes les autres équipes sont reversées pour un tableau consolante (place 17 à 28).</p>
 
-     <!-- <h3>Tournoi pickleball 32 équipes : le format 8 poules de 4</h3> -->
-      <!-- <p>Pour les très grandes compétitions, le format 8 poules de 4 permet d'accueillir 32 équipes. A l'issue de la phase preliminaire, les premiers de chaque poule joue se retouvent dans le tableau 1, les deuxiemes dans les tableau 2...etc. Classement complet de 1 à 32 avec 6 match garantie pour toutes les equipes</p> -->
+     <h3>Tournoi pickleball 32 équipes : le format 8 poules de 4</h3>
+      <p>Pour les très grandes compétitions, le format 8 poules de 4 permet d'accueillir 32 équipes. A l'issue de la phase preliminaire, les premiers de chaque poule joue se retouvent dans le tableau 1, les deuxiemes dans les tableau 2...etc. Classement complet de 1 à 32 avec 6 match garantie pour toutes les equipes</p>
 
-      <!-- <h3>Tableaux multiples et consolante</h3> -->
-      <!-- <p>Dans tous les formats à partir de 2 poules, PickleTM gère simultanément le tableau principal et le ou les tableaux consolante. Les équipes sont automatiquement orientées dans le bon tableau selon leurs résultats de poule, sans aucune intervention manuelle de l'organisateur. Le classement final intègre toutes les places, du 1er jusqu'au dernier participant.</p> -->
-    <!-- </article> -->
+      <h3>Tableaux multiples et consolante</h3>
+      <p>Dans tous les formats à partir de 2 poules, PickleTM gère simultanément le tableau principal et le ou les tableaux consolante. Les équipes sont automatiquement orientées dans le bon tableau selon leurs résultats de poule, sans aucune intervention manuelle de l'organisateur. Le classement final intègre toutes les places, du 1er jusqu'au dernier participant.</p>
+    </article>
 
   </div><!-- /seo-content-wrap -->
 </section>
@@ -3542,10 +3500,9 @@
 <!-- CTA -->
 <section class="cta-section" id="contact" aria-label="Obtenir PickleTM">
   <h2>Prêt à gérer votre <span style="background:linear-gradient(135deg,#1e90ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent">prochain tournoi ?</span></h2>
-  <p>Contactez-nous pour obtenir votre licence PickleTM et commencer à organiser des tournois de pickleball professionnels dès aujourd'hui. Version de demonstration valable 2 jours (hors week end) gratuite sur simple demande</p>
+  <p>Contactez-nous pour obtenir votre licence PickleTM et commencer à organiser des tournois de pickleball professionnels dès aujourd'hui.</p>
   <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
     <a href="mailto:PickleTM94@gmail.com" class="btn-primary">✉️ Nous contacter</a>
-    <a href="tarifs.html" class="btn-secondary">💰 Voir les tarifs</a>
     <a href="#apercu" class="btn-secondary">📺 Revoir l'aperçu</a>
   </div>
 </section>
