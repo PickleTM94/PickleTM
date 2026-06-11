@@ -61,7 +61,7 @@
       "Homologation FFT (K25, K100, K250, K500)",
       "Export DUPR",
       "Export Excel XLSX",
-      "8 formats de tournoi (2 à 32 équipes)",
+      "10 formats de tournoi (2 à 32 équipes)",
       "Fonctionnement 100% hors ligne",
       "Mode sombre et mode clair",
       "Gestion des joueurs avec licences FFT",
@@ -370,6 +370,8 @@
     }
     .legend-dot.blue { background: #1e90ff; box-shadow: 0 0 8px rgba(30,144,255,.5); }
     .legend-dot.gold { background: #f5a623; box-shadow: 0 0 8px rgba(245,166,35,.5); }
+	.legend-dot.green { background: #5AC46F; box-shadow: 0 0 8px rgba(90,196,111,.5); }
+	
     .formats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -387,11 +389,17 @@
       border-top: 3px solid transparent;
     }
     .format-p4 { border-top-color: rgba(30,144,255,0.5); }
+	.format-p5 { border-top-color: rgba(90,196,111,0.5); }
     .format-p6 { border-top-color: rgba(245,166,35,0.5); }
     .format-p4:hover {
       transform: translateY(-6px);
       border-color: #1e90ff;
       box-shadow: 0 12px 36px rgba(30,144,255,0.2);
+    }
+    .format-p5:hover {
+      transform: translateY(-6px);
+      border-color: #1e90ff;
+      box-shadow: 0 12px 36px rgba(90,196,111,0.,0.2);
     }
     .format-p6:hover {
       transform: translateY(-6px);
@@ -408,6 +416,8 @@
       color: var(--blue); margin-bottom: 6px;
     }
     .format-name-gold { color: #f5a623; }
+	.format-name-green { color: #5AC46F; }
+	
     .format-teams {
       font-size: .8rem; color: var(--muted);
       margin-bottom: 10px;
@@ -422,6 +432,10 @@
     }
     .format-matches-gold {
       color: #f5a623;
+      background: rgba(245,166,35,0.1);
+    }
+    .format-matches-green {
+      color: #5AC46F;
       background: rgba(245,166,35,0.1);
     }
 
@@ -1321,7 +1335,7 @@
   </div>
   <div class="hero-stats">
     <div class="hero-stat">
-      <div class="num">9</div>
+      <div class="num">10</div>
       <div class="lbl">Formats de tournoi</div>
     </div>
     <div class="hero-stat">
@@ -1369,6 +1383,7 @@
   </div>
   <div class="formats-legend reveal">
     <span class="legend-dot blue"></span><span>Poules de 4 équipes</span>
+	<span class="legend-dot green" style="margin-left:20px"></span><span>Poules de 5 équipes</span>
     <span class="legend-dot gold" style="margin-left:20px"></span><span>Poules de 6 équipes</span>
   </div>
   <div class="formats-grid">
@@ -1476,6 +1491,21 @@
       <div class="format-name">8 poules</div>
       <div class="format-teams">32 équipes · 4/poule</div>
       <div class="format-matches">96 matchs</div>
+    </div>
+    <div class="format-card format-p5 reveal">
+      <svg class="format-svg" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="28" cy="22" rx="17" ry="17" fill="#5AC46F" opacity="0.18"/>
+        <ellipse cx="28" cy="22" rx="17" ry="17" fill="none" stroke="#5AC46F" stroke-width="2.5"/>
+
+        <!-- handle -->
+        <rect x="24.5" y="37" width="7" height="16" rx="3.5" fill="#5AC46F" opacity="0.7"/>
+        <!-- number badge -->
+        <circle cx="47" cy="10" r="10" fill="#5AC46F"/>
+        <text x="47" y="14.5" text-anchor="middle" font-family="Exo 2, sans-serif" font-weight="900" font-size="11" fill="white">2</text>
+      </svg>
+      <div class="format-name format-name-green">2 poules × 5</div>
+      <div class="format-teams">10 équipes · 5/poule</div>
+      <div class="format-matches format-matches-green">34 matchs</div>
     </div>
     <div class="format-card format-p6 reveal">
       <svg class="format-svg" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
@@ -3567,7 +3597,7 @@
       <p>Organiser un tournoi de pickleball nécessite une préparation rigoureuse : choix du format, gestion des inscriptions, création des poules, suivi des scores en temps réel et édition des résultats finaux. PickleTM automatise l'ensemble de ces étapes dans une application de bureau unique, disponible sur Windows et macOS, fonctionnant entièrement hors ligne le jour J.</p>
 
       <h3>Étape 1 — Choisir le bon format de tournoi</h3>
-      <p>Le choix du format dépend directement du nombre d'équipes inscrites et du nombre de terrains disponibles. PickleTM propose 8 formats distincts couvrant de 6 à 32 équipes :</p>
+      <p>Le choix du format dépend directement du nombre d'équipes inscrites et du nombre de terrains disponibles. PickleTM propose 10 formats distincts couvrant de 4 à 32 équipes :</p>
       <ul>
         <li><strong>1 poule de 6 équipes</strong> — format idéal pour une petite compétition de club avec 20 matchs au total. Chaque équipe joue un round-robin complet (5 matchs), puis les 4 premiers s'affrontent en demi-finales croisées (1er vs 4e, 2e vs 3e), avec une finale, un match pour la 3e place et un match de classement 5e/6e.</li>
 		<li><strong>2 poules de 6 équipes</strong> — adapté à 12 équipes avec un tableau principal (places 1–8) et un tableau consolante (places 9–12). Chaque équipe est garantie de jouer au minimum 7 matchs.</li>
