@@ -893,9 +893,10 @@ let state = {
 // ============================================================
 async function api(action, params = {}) {
   try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      body: JSON.stringify({ action, token: state.token, ...params }),
+    const urlParams = new URLSearchParams({ action, token: state.token || '', ...params });
+    const res = await fetch(API_URL + '?' + urlParams.toString(), {
+      method: 'GET',
+      redirect: 'follow',
     });
     return await res.json();
   } catch(e) {
