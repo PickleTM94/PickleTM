@@ -967,16 +967,18 @@ async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value;
   if (!email || !password) { toast('Remplissez tous les champs', 'error'); return; }
+  
   const res = await api('login', { email, password });
-  if (res.data && res.data.success) {
-    state.token = res.data.token;
-    state.membre = res.data.membre;
+  
+  if (res && res.success && res.token) {
+    state.token = res.token;
+    state.membre = res.membre;
     localStorage.setItem('token', state.token);
     localStorage.setItem('membre', JSON.stringify(state.membre));
     enterApp();
     toast('Bienvenue ' + state.membre.prenom + ' !', 'success');
   } else {
-    toast(res.data?.message || res.message || 'Erreur de connexion', 'error');
+    toast(res?.message || 'Erreur de connexion', 'error');
   }
 }
 
