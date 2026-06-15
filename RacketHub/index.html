@@ -892,16 +892,31 @@ let state = {
 // API
 // ============================================================
 async function api(action, params = {}) {
-  try {
-    const urlParams = new URLSearchParams({ action, token: state.token || '', ...params });
-    const res = await fetch(API_URL + '?' + urlParams.toString(), {
-      method: 'GET',
-      redirect: 'follow',
+  return new Promise((resolve) => {
+    const callbackName = 'cb_' + Math.random().toString(36).substr(2, 9);
+    const urlParams = new URLSearchParams({
+      action,
+      token: state.token || '',
+      callback: callbackName,
+      ...params
     });
-    return await res.json();
-  } catch(e) {
-    return { success: false, message: 'Erreur réseau : ' + e.message };
-  }
+
+    window[callbackName] = function(data) {
+      resolve(data);
+      delete window[callbackName];
+      document.getElementById(callbackName)?.remove();
+    };
+
+    const script = document.createElement('script');
+    script.id = callbackName;
+    script.src = API_URL + '?' + urlParams.toString();
+    script.onerror = function() {
+      resolve({ success: false, message: 'Erreur réseau' });
+      delete window[callbackName];
+      script.remove();
+    };
+    document.body.appendChild(script);
+  });
 }
 
 // ============================================================
