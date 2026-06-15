@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Court Reserve — Tennis & Pickleball</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --g1: #0a1a0e;
+    --g2: #0f2914;
+    --g3: #163d1c;
+    --emerald: #10b981;
+    --emerald-bright: #34d399;
+    --emerald-glow: #6ee7b7;
+    --gold: #d4af37;
+    --white: #f0fdf4;
+    --white-dim: rgba(240,253,244,0.7);
+    --white-faint: rgba(240,253,244,0.12);
+    --white-glass: rgba(240,253,244,0.06);
+    --glass-border: rgba(110,231,183,0.2);
+    --glass-border-bright: rgba(110,231,183,0.5);
+    --text-muted: rgba(240,253,244,0.5);
+    --danger: #f87171;
+    --warning: #fbbf24;
+    --tennis-color: #d4af37;
+    --pickle-color: #34d399;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--g1);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BACKGROUND */
+  .bg-orbs {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.18;
+    animation: orbFloat 8s ease-in-out infinite;
+  }
+  .orb-1 { width: 500px; height: 500px; background: #10b981; top: -100px; left: -100px; animation-delay: 0s; }
+  .orb-2 { width: 400px; height: 400px; background: #065f46; top: 40%; right: -80px; animation-delay: -3s; }
+  .orb-3 { width: 300px; height: 300px; background: #34d399; bottom: -80px; left: 30%; animation-delay: -6s; }
+  @keyframes orbFloat {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-30px) scale(1.05); }
+  }
+
+  /* GLASSMORPHISM BASE */
+  .glass {
+    background: var(--white-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+  }
+  .glass-bright {
+    background: rgba(16,185,129,0.08);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border-bright);
+    border-radius: 16px;
+  }
+
+  /* LAYOUT */
+  #app { position: relative; z-index: 1; min-height: 100vh; }
+
+  /* ===== HEADER ===== */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: rgba(10,26,14,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .logo-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--emerald), var(--emerald-glow));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 0 20px rgba(16,185,129,0.4);
+  }
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    background: linear-gradient(135deg, var(--emerald-bright), var(--emerald-glow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .logo-sub { font-size: 11px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .user-info { text-align: right; }
+  .user-name { font-size: 14px; font-weight: 600; color: var(--white); }
+  .user-role { font-size: 11px; color: var(--emerald-bright); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    letter-spacing: 0.3px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--emerald), #059669);
+    color: white;
+    box-shadow: 0 4px 20px rgba(16,185,129,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(16,185,129,0.5); }
+  .btn-ghost {
+    background: var(--white-faint);
+    color: var(--white-dim);
+    border: 1px solid var(--glass-border);
+  }
+  .btn-ghost:hover { background: rgba(240,253,244,0.15); color: var(--white); }
+  .btn-danger {
+    background: rgba(248,113,113,0.15);
+    color: var(--danger);
+    border: 1px solid rgba(248,113,113,0.3);
+  }
+  .btn-danger:hover { background: rgba(248,113,113,0.25); }
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), #b8960c);
+    color: #0a1a0e;
+    font-weight: 700;
+    box-shadow: 0 4px 20px rgba(212,175,55,0.3);
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(212,175,55,0.45); }
+  .btn-sm { padding: 7px 14px; font-size: 12px; border-radius: 8px; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+  /* ===== PAGES ===== */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ===== LOGIN / REGISTER PAGE ===== */
+  #page-auth {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+  .auth-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 48px 40px;
+  }
+  .auth-logo {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .auth-logo .logo-icon {
+    width: 64px; height: 64px; font-size: 32px;
+    margin: 0 auto 16px;
+    box-shadow: 0 0 40px rgba(16,185,129,0.5);
+  }
+  .auth-logo h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    background: linear-gradient(135deg, var(--emerald-bright), var(--emerald-glow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .auth-logo p { color: var(--text-muted); font-size: 14px; margin-top: 6px; }
+
+  .auth-tabs {
+    display: flex;
+    background: var(--white-glass);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 28px;
+    border: 1px solid var(--glass-border);
+  }
+  .auth-tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    border: none;
+    background: none;
+    font-family: 'Inter', sans-serif;
+  }
+  .auth-tab.active {
+    background: linear-gradient(135deg, var(--emerald), #059669);
+    color: white;
+    box-shadow: 0 2px 12px rgba(16,185,129,0.4);
+  }
+
+  /* FORM */
+  .form-group { margin-bottom: 18px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  label { display: block; font-size: 12px; font-weight: 500; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  input, select {
+    width: 100%;
+    padding: 13px 16px;
+    background: var(--white-faint);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    transition: all 0.2s;
+    outline: none;
+  }
+  input::placeholder { color: var(--text-muted); }
+  input:focus, select:focus {
+    border-color: var(--emerald);
+    background: rgba(16,185,129,0.08);
+    box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
+  }
+  select option { background: var(--g2); color: var(--white); }
+
+  .form-submit { width: 100%; padding: 14px; font-size: 15px; font-weight: 600; margin-top: 8px; }
+
+  /* ===== MAIN APP ===== */
+  #page-app { display: none; }
+  #page-app.active { display: flex; flex-direction: column; min-height: 100vh; }
+
+  .app-body {
+    flex: 1;
+    padding: 32px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    background: var(--white-glass);
+    padding: 6px;
+    border-radius: 14px;
+    border: 1px solid var(--glass-border);
+    width: fit-content;
+  }
+  .nav-tab {
+    padding: 10px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    border: none;
+    background: none;
+    font-family: 'Inter', sans-serif;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-tab.active {
+    background: linear-gradient(135deg, var(--emerald), #059669);
+    color: white;
+    box-shadow: 0 2px 12px rgba(16,185,129,0.35);
+  }
+  .nav-tab:hover:not(.active) { color: var(--white); background: var(--white-faint); }
+
+  /* ===== SECTION TITLES ===== */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, var(--white), var(--emerald-glow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .section-sub { color: var(--text-muted); font-size: 14px; margin-bottom: 28px; }
+
+  /* ===== CALENDAR GRID ===== */
+  .calendar-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .date-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--white-glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 8px 16px;
+  }
+  .date-nav button {
+    background: none;
+    border: none;
+    color: var(--emerald-bright);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0 4px;
+    transition: color 0.2s;
+  }
+  .date-nav button:hover { color: var(--emerald-glow); }
+  .date-nav span {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    min-width: 180px;
+    text-align: center;
+  }
+
+  .sport-filter {
+    display: flex;
+    gap: 8px;
+  }
+  .sport-btn {
+    padding: 9px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+    background: var(--white-glass);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .sport-btn.active-tennis {
+    background: rgba(212,175,55,0.15);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .sport-btn.active-pickle {
+    background: rgba(52,211,153,0.15);
+    border-color: var(--emerald-bright);
+    color: var(--emerald-bright);
+  }
+
+  /* GRID */
+  .grid-wrapper { overflow-x: auto; }
+  .slots-grid {
+    display: grid;
+    grid-template-columns: 80px repeat(11, 1fr);
+    gap: 6px;
+    min-width: 700px;
+  }
+  .grid-header {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 10px 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .grid-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--white-dim);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+  }
+  .slot {
+    padding: 10px 6px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    position: relative;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .slot-available-tennis {
+    background: rgba(212,175,55,0.1);
+    border-color: rgba(212,175,55,0.3);
+    color: var(--gold);
+  }
+  .slot-available-tennis:hover {
+    background: rgba(212,175,55,0.25);
+    border-color: var(--gold);
+    transform: scale(1.04);
+    box-shadow: 0 4px 20px rgba(212,175,55,0.3);
+  }
+  .slot-available-pickle {
+    background: rgba(52,211,153,0.1);
+    border-color: rgba(52,211,153,0.3);
+    color: var(--emerald-bright);
+  }
+  .slot-available-pickle:hover {
+    background: rgba(52,211,153,0.25);
+    border-color: var(--emerald-bright);
+    transform: scale(1.04);
+    box-shadow: 0 4px 20px rgba(52,211,153,0.3);
+  }
+  .slot-taken {
+    background: rgba(240,253,244,0.04);
+    border-color: rgba(240,253,244,0.08);
+    color: var(--text-muted);
+    cursor: not-allowed;
+  }
+  .slot-mine {
+    background: rgba(16,185,129,0.2);
+    border-color: var(--emerald);
+    color: var(--emerald-bright);
+    cursor: pointer;
+  }
+  .slot-mine:hover { background: rgba(248,113,113,0.2); border-color: var(--danger); color: var(--danger); }
+  .slot-mine:hover::after { content: 'Annuler'; font-size: 10px; }
+  .slot-blocked {
+    background: rgba(240,253,244,0.02);
+    border-color: rgba(240,253,244,0.05);
+    color: rgba(240,253,244,0.15);
+    cursor: not-allowed;
+  }
+  .slot-icon { font-size: 16px; }
+  .slot-label { font-size: 10px; opacity: 0.8; }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+
+  /* ===== MES RÉSERVATIONS ===== */
+  .resas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .resa-card {
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .resa-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(180deg, var(--emerald), var(--emerald-glow));
+    border-radius: 4px 0 0 4px;
+  }
+  .resa-card.tennis::before { background: linear-gradient(180deg, var(--gold), #b8960c); }
+  .resa-sport {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  .resa-sport.tennis { color: var(--gold); }
+  .resa-sport.pickleball { color: var(--emerald-bright); }
+  .resa-court { font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+  .resa-details { color: var(--text-muted); font-size: 13px; line-height: 1.6; }
+  .resa-date { font-size: 15px; font-weight: 600; color: var(--white-dim); margin-top: 8px; }
+  .resa-actions { margin-top: 16px; }
+
+  /* ===== ADMIN ===== */
+  .admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .stat-card { padding: 24px; }
+  .stat-value { font-size: 36px; font-weight: 700; color: var(--emerald-bright); }
+  .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+  .members-table { width: 100%; border-collapse: collapse; }
+  .members-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .members-table td {
+    padding: 14px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(240,253,244,0.05);
+    vertical-align: middle;
+  }
+  .members-table tr:hover td { background: var(--white-glass); }
+
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-attente { background: rgba(251,191,36,0.15); color: var(--warning); border: 1px solid rgba(251,191,36,0.3); }
+  .badge-actif { background: rgba(52,211,153,0.15); color: var(--emerald-bright); border: 1px solid rgba(52,211,153,0.3); }
+  .badge-suspendu { background: rgba(248,113,113,0.15); color: var(--danger); border: 1px solid rgba(248,113,113,0.3); }
+  .badge-admin { background: rgba(212,175,55,0.15); color: var(--gold); border: 1px solid rgba(212,175,55,0.3); }
+
+  /* ===== TOAST ===== */
+  #toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .toast-item {
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    backdrop-filter: blur(20px);
+    animation: toastIn 0.3s ease;
+    max-width: 320px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .toast-success { background: rgba(16,185,129,0.2); border: 1px solid var(--emerald); color: var(--emerald-glow); }
+  .toast-error { background: rgba(248,113,113,0.2); border: 1px solid var(--danger); color: #fca5a5; }
+  .toast-info { background: rgba(96,165,250,0.2); border: 1px solid #60a5fa; color: #93c5fd; }
+  @keyframes toastIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    width: 100%;
+    max-width: 460px;
+    padding: 36px;
+    margin: 20px;
+  }
+  .modal h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin-bottom: 8px;
+    color: var(--white);
+  }
+  .modal p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+  .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+
+  /* LOADING */
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    color: var(--text-muted);
+    flex-direction: column;
+    gap: 16px;
+  }
+  .spinner {
+    width: 36px; height: 36px;
+    border: 3px solid var(--glass-border);
+    border-top-color: var(--emerald);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-state h3 { font-size: 18px; color: var(--white-dim); margin-bottom: 8px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    header { padding: 16px 20px; }
+    .app-body { padding: 20px; }
+    .form-row { grid-template-columns: 1fr; }
+    .auth-card { padding: 32px 24px; }
+  }
+
+  /* QUOTA BAR */
+  .quota-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    background: var(--white-glass);
+    border: 1px solid var(--glass-border);
+    margin-bottom: 24px;
+    width: fit-content;
+  }
+  .quota-label { font-size: 13px; color: var(--text-muted); }
+  .quota-dots { display: flex; gap: 6px; }
+  .quota-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--emerald);
+    box-shadow: 0 0 8px rgba(16,185,129,0.5);
+  }
+  .quota-dot.empty {
+    background: var(--white-faint);
+    border: 1px solid var(--glass-border);
+    box-shadow: none;
+  }
+  .quota-text { font-size: 13px; font-weight: 600; color: var(--emerald-bright); }
+
+  .table-wrapper { overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<div id="app">
+
+  <!-- ===== AUTH PAGE ===== -->
+  <div id="page-auth" class="page active">
+    <div class="auth-card glass">
+      <div class="auth-logo">
+        <div class="logo-icon">🎾</div>
+        <h1>Court Reserve</h1>
+        <p>Tennis & Pickleball Club</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuthTab('login')">Connexion</button>
+        <button class="auth-tab" onclick="switchAuthTab('register')">Inscription</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="form-login">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="login-email" placeholder="votre@email.com" />
+        </div>
+        <div class="form-group">
+          <label>Mot de passe</label>
+          <input type="password" id="login-password" placeholder="••••••••" />
+        </div>
+        <button class="btn btn-primary form-submit" onclick="doLogin()">Se connecter</button>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="form-register" style="display:none">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nom</label>
+            <input type="text" id="reg-nom" placeholder="Dupont" />
+          </div>
+          <div class="form-group">
+            <label>Prénom</label>
+            <input type="text" id="reg-prenom" placeholder="Jean" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="reg-email" placeholder="votre@email.com" />
+        </div>
+        <div class="form-group">
+          <label>Mot de passe</label>
+          <input type="password" id="reg-password" placeholder="Minimum 8 caractères" />
+        </div>
+        <button class="btn btn-primary form-submit" onclick="doRegister()">Créer mon compte</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN APP PAGE ===== -->
+  <div id="page-app" class="page">
+    <header>
+      <div class="logo">
+        <div class="logo-icon">🎾</div>
+        <div>
+          <div class="logo-text">Court Reserve</div>
+          <div class="logo-sub">Tennis & Pickleball</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="user-info">
+          <div class="user-name" id="header-name">—</div>
+          <div class="user-role" id="header-role">membre</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="doLogout()">Déconnexion</button>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <div class="nav-tabs">
+        <button class="nav-tab active" onclick="showSection('reserver')" id="tab-reserver">
+          📅 Réserver
+        </button>
+        <button class="nav-tab" onclick="showSection('mes-resas')" id="tab-mes-resas">
+          🎯 Mes réservations
+        </button>
+        <button class="nav-tab" onclick="showSection('admin')" id="tab-admin" style="display:none">
+          ⚙️ Administration
+        </button>
+      </div>
+
+      <!-- SECTION RÉSERVER -->
+      <div id="section-reserver">
+        <div class="section-title">Réserver un court</div>
+        <div class="section-sub">Sélectionnez un créneau disponible pour votre réservation</div>
+
+        <div id="quota-display" class="quota-bar">
+          <span class="quota-label">Réservations cette semaine</span>
+          <div class="quota-dots" id="quota-dots"></div>
+          <span class="quota-text" id="quota-text">0 / 3</span>
+        </div>
+
+        <div class="calendar-controls">
+          <div class="date-nav">
+            <button onclick="changeDate(-1)">‹</button>
+            <span id="current-date-label">—</span>
+            <button onclick="changeDate(1)">›</button>
+          </div>
+          <div class="sport-filter">
+            <button class="sport-btn active-tennis" id="btn-tennis" onclick="setSport('tennis')">🎾 Tennis</button>
+            <button class="sport-btn" id="btn-pickle" onclick="setSport('pickleball')">🏓 Pickleball</button>
+          </div>
+        </div>
+
+        <div class="glass" style="padding: 20px;">
+          <div class="grid-wrapper">
+            <div class="slots-grid" id="slots-grid">
+              <div class="loading"><div class="spinner"></div></div>
+            </div>
+          </div>
+          <div class="legend">
+            <div class="legend-item">
+              <div class="legend-dot" style="background:rgba(212,175,55,0.2);border-color:rgba(212,175,55,0.5)"></div>
+              Disponible (tennis)
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:rgba(52,211,153,0.2);border-color:rgba(52,211,153,0.5)"></div>
+              Disponible (pickleball)
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:rgba(16,185,129,0.2);border-color:#10b981"></div>
+              Ma réservation
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:rgba(240,253,244,0.04);border-color:rgba(240,253,244,0.1)"></div>
+              Indisponible
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION MES RÉSERVATIONS -->
+      <div id="section-mes-resas" style="display:none">
+        <div class="section-title">Mes réservations</div>
+        <div class="section-sub">Vos créneaux à venir — annulation possible jusqu'à 3h avant</div>
+        <div id="mes-resas-content">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+      </div>
+
+      <!-- SECTION ADMIN -->
+      <div id="section-admin" style="display:none">
+        <div class="section-title">Administration</div>
+        <div class="section-sub">Gestion des membres et des réservations</div>
+
+        <div class="nav-tabs" style="margin-bottom: 24px;">
+          <button class="nav-tab active" onclick="showAdminTab('membres')" id="atab-membres">👥 Membres</button>
+          <button class="nav-tab" onclick="showAdminTab('attente')" id="atab-attente">⏳ En attente</button>
+          <button class="nav-tab" onclick="showAdminTab('reservations')" id="atab-reservations">📋 Réservations</button>
+        </div>
+
+        <div id="admin-membres">
+          <div id="membres-content">
+            <div class="loading"><div class="spinner"></div></div>
+          </div>
+        </div>
+        <div id="admin-attente" style="display:none">
+          <div id="attente-content">
+            <div class="loading"><div class="spinner"></div></div>
+          </div>
+        </div>
+        <div id="admin-reservations" style="display:none">
+          <div class="calendar-controls" style="margin-bottom: 16px;">
+            <div class="date-nav">
+              <button onclick="changeAdminDate(-1)">‹</button>
+              <span id="admin-date-label">—</span>
+              <button onclick="changeAdminDate(1)">›</button>
+            </div>
+          </div>
+          <div id="admin-resas-content">
+            <div class="loading"><div class="spinner"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMATION -->
+<div class="modal-overlay" id="modal">
+  <div class="modal glass">
+    <h3 id="modal-title">Confirmer la réservation</h3>
+    <p id="modal-body">Êtes-vous sûr de vouloir effectuer cette action ?</p>
+    <div id="modal-extra"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-primary" id="modal-confirm" onclick="confirmModal()">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+const API_URL = 'https://script.google.com/macros/s/AKfycbzPo8ewlWvyr5wXml2OKD-Fe9fYK_0PxcZeK_J2GR7G_bNARDzbu9jiBHL1KhV1nCaK/exec';
+const CRENEAUX = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'];
+const COURTS_PICKLE = ['P1','P2','P3','P4'];
+
+// ============================================================
+// STATE
+// ============================================================
+let state = {
+  token: localStorage.getItem('token') || null,
+  membre: JSON.parse(localStorage.getItem('membre') || 'null'),
+  currentDate: new Date(),
+  adminDate: new Date(),
+  selectedSport: 'tennis',
+  modalCallback: null,
+  slotsData: null,
+  mesResas: [],
+};
+
+// ============================================================
+// API
+// ============================================================
+async function api(action, params = {}) {
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action, token: state.token, ...params }),
+    });
+    return await res.json();
+  } catch(e) {
+    return { success: false, message: 'Erreur réseau : ' + e.message };
+  }
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function toast(msg, type = 'info') {
+  const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+  const el = document.createElement('div');
+  el.className = `toast-item toast-${type}`;
+  el.innerHTML = `<span>${icons[type]}</span><span>${msg}</span>`;
+  document.getElementById('toast').appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+function openModal(title, body, confirmLabel, callback, confirmClass = 'btn-primary') {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').textContent = body;
+  document.getElementById('modal-extra').innerHTML = '';
+  document.getElementById('modal-confirm').textContent = confirmLabel;
+  document.getElementById('modal-confirm').className = `btn ${confirmClass}`;
+  state.modalCallback = callback;
+  document.getElementById('modal').classList.add('active');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  state.modalCallback = null;
+}
+function confirmModal() {
+  if (state.modalCallback) state.modalCallback();
+  closeModal();
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t, i) => {
+    t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register'));
+  });
+  document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('form-register').style.display = tab === 'register' ? 'block' : 'none';
+}
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  if (!email || !password) { toast('Remplissez tous les champs', 'error'); return; }
+  const res = await api('login', { email, password });
+  if (res.data && res.data.success) {
+    state.token = res.data.token;
+    state.membre = res.data.membre;
+    localStorage.setItem('token', state.token);
+    localStorage.setItem('membre', JSON.stringify(state.membre));
+    enterApp();
+    toast('Bienvenue ' + state.membre.prenom + ' !', 'success');
+  } else {
+    toast(res.data?.message || res.message || 'Erreur de connexion', 'error');
+  }
+}
+
+async function doRegister() {
+  const nom = document.getElementById('reg-nom').value.trim();
+  const prenom = document.getElementById('reg-prenom').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value;
+  if (!nom || !prenom || !email || !password) { toast('Remplissez tous les champs', 'error'); return; }
+  if (password.length < 8) { toast('Le mot de passe doit faire au moins 8 caractères', 'error'); return; }
+  const res = await api('inscrire', { nom, prenom, email, password });
+  if (res.data && res.data.success || res.success) {
+    toast('Compte créé ! En attente de validation par l\'administrateur.', 'success');
+    switchAuthTab('login');
+  } else {
+    toast(res.data?.message || res.message || 'Erreur lors de l\'inscription', 'error');
+  }
+}
+
+function doLogout() {
+  api('logout');
+  state.token = null;
+  state.membre = null;
+  localStorage.removeItem('token');
+  localStorage.removeItem('membre');
+  showPage('page-auth');
+}
+
+// ============================================================
+// APP INIT
+// ============================================================
+function enterApp() {
+  showPage('page-app');
+  document.getElementById('header-name').textContent = state.membre.prenom + ' ' + state.membre.nom;
+  document.getElementById('header-role').textContent = state.membre.role;
+  if (state.membre.role === 'admin') {
+    document.getElementById('tab-admin').style.display = 'flex';
+  }
+  showSection('reserver');
+  loadSlots();
+  loadMesResas();
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showSection(name) {
+  ['reserver','mes-resas','admin'].forEach(s => {
+    document.getElementById('section-' + s).style.display = s === name ? 'block' : 'none';
+    const tab = document.getElementById('tab-' + s);
+    if (tab) tab.classList.toggle('active', s === name);
+  });
+  if (name === 'mes-resas') loadMesResas();
+  if (name === 'admin') { showAdminTab('membres'); loadAdminMembres(); }
+}
+
+// ============================================================
+// DATE HELPERS
+// ============================================================
+function formatDate(d) {
+  return d.toISOString().split('T')[0];
+}
+function formatDateFR(d) {
+  return d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+}
+function changeDate(delta) {
+  const d = new Date(state.currentDate);
+  d.setDate(d.getDate() + delta);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const max = new Date(today); max.setDate(max.getDate() + 7);
+  if (d < today || d > max) return;
+  state.currentDate = d;
+  loadSlots();
+}
+function changeAdminDate(delta) {
+  state.adminDate.setDate(state.adminDate.getDate() + delta);
+  document.getElementById('admin-date-label').textContent = formatDateFR(state.adminDate);
+  loadAdminResas();
+}
+
+// ============================================================
+// SPORT FILTER
+// ============================================================
+function setSport(sport) {
+  state.selectedSport = sport;
+  document.getElementById('btn-tennis').className = 'sport-btn' + (sport === 'tennis' ? ' active-tennis' : '');
+  document.getElementById('btn-pickle').className = 'sport-btn' + (sport === 'pickleball' ? ' active-pickle' : '');
+  renderGrid();
+}
+
+// ============================================================
+// SLOTS GRID
+// ============================================================
+async function loadSlots() {
+  document.getElementById('current-date-label').textContent = formatDateFR(state.currentDate);
+  document.getElementById('slots-grid').innerHTML = '<div class="loading"><div class="spinner"></div><span>Chargement des créneaux...</span></div>';
+  const dateStr = formatDate(state.currentDate);
+  const res = await api('getCreneauxDisponibles', { date: dateStr });
+  if (res.data && res.data.data) {
+    state.slotsData = res.data.data;
+  } else {
+    state.slotsData = {};
+  }
+  await loadMesResas(true);
+  renderGrid();
+  renderQuota();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('slots-grid');
+  const sport = state.selectedSport;
+
+  if (!state.slotsData) {
+    grid.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    return;
+  }
+
+  const courts = sport === 'tennis' ? ['tennis'] : COURTS_PICKLE;
+  const courtLabels = { tennis: '🎾 Tennis', P1: '🏓 Court 1', P2: '🏓 Court 2', P3: '🏓 Court 3', P4: '🏓 Court 4' };
+
+  const cols = courts.length + 1;
+  grid.style.gridTemplateColumns = `100px repeat(${courts.length}, 1fr)`;
+
+  let html = '<div class="grid-header"></div>';
+  CRENEAUX.forEach(c => {
+    html += `<div class="grid-header">${c}</div>`;
+  });
+
+  courts.forEach(court => {
+    html += `<div class="grid-label">${courtLabels[court]}</div>`;
+    CRENEAUX.forEach(creneau => {
+      const slotData = state.slotsData[creneau];
+      const myResaId = getMesResaId(formatDate(state.currentDate), creneau, sport, court);
+      let cls, icon, label, onclick;
+
+      if (myResaId) {
+        cls = 'slot slot-mine';
+        icon = '✅';
+        label = 'Réservé';
+        onclick = `cancelSlot('${myResaId}', '${creneau}', '${court}')`;
+      } else if (!slotData) {
+        cls = 'slot slot-taken';
+        icon = '—';
+        label = '';
+        onclick = '';
+      } else {
+        let available = false;
+        if (sport === 'tennis') available = slotData.tennis;
+        else available = slotData.pickleball && slotData.pickleball[court];
+
+        if (available) {
+          cls = sport === 'tennis' ? 'slot slot-available-tennis' : 'slot slot-available-pickle';
+          icon = sport === 'tennis' ? '🎾' : '🏓';
+          label = 'Libre';
+          onclick = `bookSlot('${formatDate(state.currentDate)}', '${creneau}', '${sport}', '${court}')`;
+        } else {
+          cls = 'slot slot-taken';
+          icon = '✗';
+          label = 'Pris';
+          onclick = '';
+        }
+      }
+      html += `<div class="${cls}" ${onclick ? `onclick="${onclick}"` : ''}>
+        <div class="slot-icon">${icon}</div>
+        <div class="slot-label">${label}</div>
+      </div>`;
+    });
+  });
+
+  grid.innerHTML = html;
+}
+
+function getMesResaId(date, creneau, sport, court) {
+  return state.mesResas.find(r => r.date === date && r.creneau === creneau && r.sport === sport && r.court === court)?.id || null;
+}
+
+// ============================================================
+// BOOK / CANCEL
+// ============================================================
+function bookSlot(date, creneau, sport, court) {
+  const courtLabel = sport === 'tennis' ? 'Court Tennis' : 'Pickleball ' + court;
+  openModal(
+    'Confirmer la réservation',
+    `${courtLabel} — ${creneau} le ${new Date(date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}`,
+    'Réserver',
+    async () => {
+      const res = await api('creerReservation', { date, creneau, sport, court });
+      if (res.data?.success || res.success) {
+        toast('Réservation confirmée ! 🎾', 'success');
+        loadSlots();
+      } else {
+        toast(res.data?.message || res.message || 'Erreur', 'error');
+      }
+    }
+  );
+}
+
+function cancelSlot(resaId, creneau, court) {
+  openModal(
+    'Annuler la réservation',
+    `Voulez-vous annuler votre réservation ${creneau} — Court ${court} ?`,
+    'Annuler la réservation',
+    async () => {
+      const res = await api('annulerReservation', { reservationId: resaId });
+      if (res.data?.success || res.success) {
+        toast('Réservation annulée', 'info');
+        loadSlots();
+      } else {
+        toast(res.data?.message || res.message || 'Erreur', 'error');
+      }
+    },
+    'btn-danger'
+  );
+}
+
+// ============================================================
+// MES RÉSERVATIONS
+// ============================================================
+async function loadMesResas(silent = false) {
+  if (!silent) document.getElementById('mes-resas-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const res = await api('getMesReservations');
+  state.mesResas = res.data?.data || [];
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const in7 = new Date(today); in7.setDate(in7.getDate() + 7);
+  const active = state.mesResas.filter(r => {
+    const d = new Date(r.date + 'T12:00:00');
+    return d >= today && d <= in7;
+  });
+
+  if (!silent) renderMesResas();
+  renderQuota(active.length);
+}
+
+function renderQuota(count) {
+  const c = count !== undefined ? count : state.mesResas.filter(r => new Date(r.date + 'T12:00:00') >= new Date()).length;
+  const dots = document.getElementById('quota-dots');
+  const txt = document.getElementById('quota-text');
+  if (!dots) return;
+  dots.innerHTML = [0,1,2].map(i => `<div class="quota-dot ${i < c ? '' : 'empty'}"></div>`).join('');
+  txt.textContent = `${c} / 3`;
+  txt.style.color = c >= 3 ? 'var(--danger)' : 'var(--emerald-bright)';
+}
+
+function renderMesResas() {
+  const el = document.getElementById('mes-resas-content');
+  if (!state.mesResas.length) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">📅</div><h3>Aucune réservation à venir</h3><p>Réservez un court depuis l'onglet "Réserver"</p></div>`;
+    return;
+  }
+  const sorted = [...state.mesResas].sort((a, b) => a.date.localeCompare(b.date) || a.creneau.localeCompare(b.creneau));
+  el.innerHTML = `<div class="resas-grid">${sorted.map(r => {
+    const courtLabel = r.sport === 'tennis' ? 'Court Tennis' : 'Pickleball ' + r.court;
+    const dateLabel = new Date(r.date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+    return `<div class="glass resa-card ${r.sport}">
+      <div class="resa-sport ${r.sport}">${r.sport === 'tennis' ? '🎾 Tennis' : '🏓 Pickleball'}</div>
+      <div class="resa-court">${courtLabel}</div>
+      <div class="resa-date">${dateLabel}</div>
+      <div class="resa-details">${r.creneau} — ${r.creneau.replace(':00','').replace(/^(\d+)/, m => parseInt(m)+1 + ':00')}</div>
+      <div class="resa-actions">
+        <button class="btn btn-danger btn-sm" onclick="cancelSlot('${r.id}', '${r.creneau}', '${r.court}')">Annuler</button>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+// ============================================================
+// ADMIN
+// ============================================================
+function showAdminTab(tab) {
+  ['membres','attente','reservations'].forEach(t => {
+    document.getElementById('admin-' + t).style.display = t === tab ? 'block' : 'none';
+    document.getElementById('atab-' + t).classList.toggle('active', t === tab);
+  });
+  if (tab === 'membres') loadAdminMembres();
+  if (tab === 'attente') loadAdminAttente();
+  if (tab === 'reservations') {
+    document.getElementById('admin-date-label').textContent = formatDateFR(state.adminDate);
+    loadAdminResas();
+  }
+}
+
+async function loadAdminMembres() {
+  document.getElementById('membres-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const res = await api('getTousMembres');
+  const membres = res.data?.data || [];
+  if (!membres.length) {
+    document.getElementById('membres-content').innerHTML = '<div class="empty-state"><div class="icon">👥</div><h3>Aucun membre</h3></div>';
+    return;
+  }
+  document.getElementById('membres-content').innerHTML = `<div class="glass table-wrapper"><table class="members-table">
+    <thead><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Statut</th><th>Actions</th></tr></thead>
+    <tbody>${membres.map(m => `<tr>
+      <td>${m.prenom} ${m.nom}</td>
+      <td style="color:var(--text-muted)">${m.email}</td>
+      <td><span class="badge ${m.role === 'admin' ? 'badge-admin' : ''}">${m.role}</span></td>
+      <td>${badgeStatut(m.statut)}</td>
+      <td style="display:flex;gap:8px;flex-wrap:wrap">
+        ${m.statut !== 'actif' ? `<button class="btn btn-primary btn-sm" onclick="changerStatut('${m.id}','actif')">Activer</button>` : ''}
+        ${m.statut !== 'suspendu' ? `<button class="btn btn-danger btn-sm" onclick="changerStatut('${m.id}','suspendu')">Suspendre</button>` : ''}
+        ${m.role !== 'admin' ? `<button class="btn btn-gold btn-sm" onclick="changerRole('${m.id}','admin')">→ Admin</button>` : ''}
+      </td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+async function loadAdminAttente() {
+  document.getElementById('attente-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const res = await api('getMembresEnAttente');
+  const membres = res.data?.data || [];
+  if (!membres.length) {
+    document.getElementById('attente-content').innerHTML = '<div class="empty-state"><div class="icon">✅</div><h3>Aucun compte en attente</h3></div>';
+    return;
+  }
+  document.getElementById('attente-content').innerHTML = `<div class="resas-grid">${membres.map(m => `
+    <div class="glass-bright" style="padding:20px">
+      <div style="font-size:18px;font-weight:700;margin-bottom:4px">${m.prenom} ${m.nom}</div>
+      <div style="color:var(--text-muted);font-size:13px;margin-bottom:16px">${m.email}</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary btn-sm" onclick="changerStatut('${m.id}','actif')">✓ Valider</button>
+        <button class="btn btn-danger btn-sm" onclick="changerStatut('${m.id}','suspendu')">✗ Refuser</button>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+async function loadAdminResas() {
+  document.getElementById('admin-resas-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  const res = await api('getToutesReservations', { date: formatDate(state.adminDate) });
+  const resas = res.data?.data || [];
+  if (!resas.length) {
+    document.getElementById('admin-resas-content').innerHTML = '<div class="empty-state"><div class="icon">📋</div><h3>Aucune réservation ce jour</h3></div>';
+    return;
+  }
+  document.getElementById('admin-resas-content').innerHTML = `<div class="glass table-wrapper"><table class="members-table">
+    <thead><tr><th>Membre</th><th>Créneau</th><th>Sport</th><th>Court</th><th>Action</th></tr></thead>
+    <tbody>${resas.map(r => `<tr>
+      <td>${r.membreNom}</td>
+      <td>${r.creneau}</td>
+      <td>${r.sport === 'tennis' ? '🎾 Tennis' : '🏓 Pickleball'}</td>
+      <td>${r.court}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="adminDeleteResa('${r.id}')">Supprimer</button></td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+function badgeStatut(s) {
+  const map = { en_attente: 'badge-attente', actif: 'badge-actif', suspendu: 'badge-suspendu' };
+  const labels = { en_attente: '⏳ En attente', actif: '✓ Actif', suspendu: '✗ Suspendu' };
+  return `<span class="badge ${map[s] || ''}">${labels[s] || s}</span>`;
+}
+
+async function changerStatut(membreId, statut) {
+  const res = await api('changerStatutMembre', { membreId, nouveauStatut: statut });
+  if (res.data?.success || res.success) {
+    toast('Statut mis à jour', 'success');
+    loadAdminMembres();
+    loadAdminAttente();
+  } else {
+    toast(res.data?.message || 'Erreur', 'error');
+  }
+}
+
+async function changerRole(membreId, role) {
+  const res = await api('changerRoleMembre', { membreId, nouveauRole: role });
+  if (res.data?.success || res.success) {
+    toast('Rôle mis à jour', 'success');
+    loadAdminMembres();
+  } else {
+    toast(res.data?.message || 'Erreur', 'error');
+  }
+}
+
+async function adminDeleteResa(resaId) {
+  openModal('Supprimer la réservation', 'Cette action est irréversible.', 'Supprimer', async () => {
+    const res = await api('supprimerReservationAdmin', { reservationId: resaId });
+    if (res.data?.success || res.success) {
+      toast('Réservation supprimée', 'info');
+      loadAdminResas();
+    } else {
+      toast(res.data?.message || 'Erreur', 'error');
+    }
+  }, 'btn-danger');
+}
+
+// ============================================================
+// BOOT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  if (state.token && state.membre) {
+    enterApp();
+  }
+});
+</script>
+</body>
+</html>
