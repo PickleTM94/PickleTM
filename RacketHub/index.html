@@ -40,10 +40,16 @@
 
   /* ===== PAGES ===== */
   /* FIX : toutes les pages cachées par défaut, display géré par .active */
-  .page { display: none !important; }
+ /* .page { display: none !important; }
   .page.active { display: block !important; }
   #page-auth.active { display: flex !important; min-height: 100vh; align-items: center; justify-content: center; padding: 40px 20px; }
   #page-app.active { display: flex !important; flex-direction: column; min-height: 100vh; }
+*/
+
+#page-auth { display: flex; min-height: 100vh; align-items: center; justify-content: center; padding: 40px 20px; }
+#page-app { display: none; flex-direction: column; min-height: 100vh; }
+.page { display: none; }
+
 
   /* ===== HEADER ===== */
   header { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; background: rgba(10,26,14,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 100; }
@@ -501,8 +507,16 @@ function enterApp() {
 }
 
 function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  // Cacher toutes les pages
+  document.getElementById('page-auth').style.display = 'none';
+  document.getElementById('page-app').style.display = 'none';
+  
+  // Afficher la bonne
+  if (id === 'page-auth') {
+    document.getElementById('page-auth').style.display = 'flex';
+  } else if (id === 'page-app') {
+    document.getElementById('page-app').style.display = 'flex';
+  }
 }
 
 function showSection(name) {
