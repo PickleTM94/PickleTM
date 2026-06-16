@@ -395,36 +395,29 @@ let state = {
 // JSONP API
 // ============================================================
 async function api(action, params = {}) {
-  return new Promise((resolve) => {
-    const callbackName = 'cb_' + Math.random().toString(36).substr(2, 9);
-    const allParams = { action, token: state.token || '', callback: callbackName, ...params };
+  try {
+    const allParams = { action, token: state.token || '', ...params };
     const urlParams = new URLSearchParams(allParams);
-
-    // Timeout de 15 secondes
-    const timeout = setTimeout(() => {
-      resolve({ success: false, message: 'Délai dépassé — vérifiez votre connexion' });
-      delete window[callbackName];
-      document.getElementById(callbackName)?.remove();
-    }, 15000);
-
-    window[callbackName] = function(data) {
-      clearTimeout(timeout);
-      resolve(data);
-      delete window[callbackName];
-      document.getElementById(callbackName)?.remove();
-    };
-
-    const script = document.createElement('script');
-    script.id = callbackName;
-    script.src = API_URL + '?' + urlParams.toString();
-    script.onerror = function() {
-      clearTimeout(timeout);
-      resolve({ success: false, message: 'Erreur réseau — vérifiez votre connexion' });
-      delete window[callbackName];
-      script.remove();
-    };
-    document.body.appendChild(script);
-  });
+    const targetUrl = API_URL + '?' + urlParams.toString();
+    
+    // Proxy CORS qui fonctionne sur tous les appareils
+    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl);
+    
+    const response = await fetch(proxyUrl, {
+      method: 'GET',
+      signal: AbortSignal.timeout(20000) // timeout 20 secondes
+    });
+    
+    if (!response.ok) throw new Error('Réponse réseau invalide');
+    
+    const wrapper = await response.json();
+    const data = JSON.parse(wrapper.contents);
+    return data;
+    
+  } catch(e) {
+    console.error('API error:', e);
+    return { success: false, message: 'Erreur réseau : ' + e.message };
+  }
 }
 
 // ============================================================
