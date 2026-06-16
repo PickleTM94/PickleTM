@@ -762,29 +762,14 @@ function renderGrid() {
     html += `<div class="grid-time">${creneau}</div>`;
 
     const slotData = slots[creneau] || null;
+    const mienTennis = getMesResaId(dateStr, creneau, 'tennis', 'tennis');
 
-    const tennisEstLibre = slotData && slotData.tennis === true;
-    const tennisEstPris  = slotData && slotData.tennis === false;
-    const mienTennis     = getMesResaId(dateStr, creneau, 'tennis', 'tennis');
+    // Y a-t-il au moins un pickleball false dans les données ?
+    const auMoinsUnPickleFalse = slotData && slotData.pickleball &&
+      ['P1','P2','P3','P4'].some(c => slotData.pickleball[c] === false);
 
-    // Apps Script met tennis:false quand un pickleball est réservé
-    // Il faut distinguer : tennis réservé PAR QUELQU'UN vs bloqué à cause d'un pickleball
-    // Si tennis:false ET au moins un pickleball est false ET ce pickleball n'est pas le mien
-    // → c'est un pickleball tiers qui bloque le tennis
-    const pickleReservePar3 = slotData && slotData.pickleball &&
-      ['P1','P2','P3','P4'].some(c =>
-        slotData.pickleball[c] === false &&
-        !getMesResaId(dateStr, creneau, 'pickleball', c)
-      );
-
-    // Tennis réservé directement = tennis:false ET aucun pickleball n'est false
-    const tousPicklesLibresOuMiens = !slotData || !slotData.pickleball ||
-      ['P1','P2','P3','P4'].every(c =>
-        slotData.pickleball[c] === true ||
-        getMesResaId(dateStr, creneau, 'pickleball', c) !== null
-      );
-
-    const tennisReserveDirectement = tennisEstPris && tousPicklesLibresOuMiens && !mienTennis;
+    // tennis:false causé par une vraie résa tennis = tennis:false ET aucun pickleball n'est false
+    const vraiTennisPris = slotData && slotData.tennis === false && !auMoinsUnPickleFalse;
 
     // ===== COLONNE TENNIS =====
     let clsT, iconT, txtT, onclickT = '';
@@ -793,21 +778,19 @@ function renderGrid() {
       clsT = 'grid-slot slot-mien-tennis';
       iconT = '✓'; txtT = 'Réservé';
       onclickT = `cancelSlot('${mienTennis}','${creneau}','Tennis','tennis','tennis')`;
-    } else if (pickleReservePar3) {
-      // Un pickleball tiers est réservé → tennis bloqué
+    } else if (auMoinsUnPickleFalse) {
+      // Au moins un pickleball est réservé → tennis bloqué
       clsT = 'grid-slot slot-bloque';
       iconT = '🔒'; txtT = 'Bloqué';
-    } else if (tennisReserveDirectement) {
-      // Tennis pris par quelqu'un d'autre directement
+    } else if (vraiTennisPris) {
+      // Tennis directement réservé par quelqu'un d'autre
       clsT = 'grid-slot slot-pris';
       iconT = '✗'; txtT = 'Réservé';
-    } else if (tennisEstLibre) {
+    } else {
+      // Tennis libre
       clsT = 'grid-slot slot-libre-tennis';
       iconT = '🎾'; txtT = 'Libre';
       onclickT = `bookSlot('${dateStr}','${creneau}','tennis','tennis')`;
-    } else {
-      clsT = 'grid-slot slot-pris';
-      iconT = '—'; txtT = '';
     }
 
     html += `<div class="${clsT}" ${onclickT ? `onclick="${onclickT}"` : ''}>
@@ -823,15 +806,15 @@ function renderGrid() {
       let clsP, iconP, txtP, onclickP = '';
 
       if (mienPickle) {
-        // Ma réservation
+        // Ma réservation pickleball
         clsP = 'grid-slot slot-mien-pickle';
         iconP = '✓'; txtP = 'Réservé';
         onclickP = `cancelSlot('${mienPickle}','${creneau}','Pickleball ${court}','pickleball','${court}')`;
-      } else if (tennisReserveDirectement) {
-        // Tennis réservé par quelqu'un → pickleball bloqué
+      } else if (vraiTennisPris) {
+        // Vrai tennis réservé → tous les pickleballs bloqués
         clsP = 'grid-slot slot-bloque';
         iconP = '🔒'; txtP = 'Bloqué';
-      } else if (pickleEstPris && !mienPickle) {
+      } else if (pickleEstPris) {
         // Ce court pickleball pris par quelqu'un d'autre
         clsP = 'grid-slot slot-pris';
         iconP = '✗'; txtP = 'Réservé';
