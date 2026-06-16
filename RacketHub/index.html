@@ -8,7 +8,6 @@
 <style>
   :root {
     --g1: #0a1a0e;
-    --g2: #0f2914;
     --emerald: #10b981;
     --emerald-bright: #34d399;
     --emerald-glow: #6ee7b7;
@@ -25,87 +24,42 @@
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--g1);
-    color: var(--white);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+  body { font-family: 'Inter', sans-serif; background: var(--g1); color: var(--white); min-height: 100vh; overflow-x: hidden; }
 
   .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-  .orb {
-    position: absolute; border-radius: 50%;
-    filter: blur(80px); opacity: 0.15;
-    animation: orbFloat 8s ease-in-out infinite;
-  }
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; animation: orbFloat 8s ease-in-out infinite; }
   .orb-1 { width: 500px; height: 500px; background: #10b981; top: -100px; left: -100px; }
   .orb-2 { width: 400px; height: 400px; background: #065f46; top: 40%; right: -80px; animation-delay: -3s; }
   .orb-3 { width: 300px; height: 300px; background: #34d399; bottom: -80px; left: 30%; animation-delay: -6s; }
-  @keyframes orbFloat {
-    0%,100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-20px) scale(1.04); }
-  }
+  @keyframes orbFloat { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.04); } }
 
-  .glass {
-    background: var(--white-glass);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-  }
-  .glass-bright {
-    background: rgba(16,185,129,0.08);
-    backdrop-filter: blur(24px);
-    border: 1px solid var(--glass-border-bright);
-    border-radius: 16px;
-  }
+  .glass { background: var(--white-glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 20px; }
+  .glass-bright { background: rgba(16,185,129,0.08); backdrop-filter: blur(24px); border: 1px solid var(--glass-border-bright); border-radius: 16px; }
 
   #app { position: relative; z-index: 1; min-height: 100vh; }
 
+  /* ===== PAGES ===== */
+  /* FIX : toutes les pages cachées par défaut, display géré par .active */
+  .page { display: none !important; }
+  .page.active { display: block !important; }
+  #page-auth.active { display: flex !important; min-height: 100vh; align-items: center; justify-content: center; padding: 40px 20px; }
+  #page-app.active { display: flex !important; flex-direction: column; min-height: 100vh; }
+
   /* ===== HEADER ===== */
-  header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 16px 32px;
-    background: rgba(10,26,14,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--glass-border);
-    position: sticky; top: 0; z-index: 100;
-  }
+  header { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; background: rgba(10,26,14,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 100; }
   .logo { display: flex; align-items: center; gap: 12px; }
-  .logo-icon {
-    width: 42px; height: 42px;
-    background: linear-gradient(135deg, var(--emerald), var(--emerald-glow));
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
-    box-shadow: 0 0 20px rgba(16,185,129,0.4);
-  }
-  .logo-name {
-    font-family: 'Playfair Display', serif; font-size: 20px;
-    background: linear-gradient(135deg, var(--emerald-bright), var(--emerald-glow));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
+  .logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--emerald), var(--emerald-glow)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 20px rgba(16,185,129,0.4); }
+  .logo-name { font-family: 'Playfair Display', serif; font-size: 20px; background: linear-gradient(135deg, var(--emerald-bright), var(--emerald-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .logo-sub { font-size: 11px; color: var(--text-muted); letter-spacing: 2px; }
   .header-right { display: flex; align-items: center; gap: 14px; }
   .user-name { font-size: 14px; font-weight: 600; }
   .user-role { font-size: 11px; color: var(--emerald-bright); text-transform: uppercase; letter-spacing: 1px; }
 
   /* ===== BUTTONS ===== */
-  .btn {
-    padding: 9px 20px; border-radius: 10px; border: none;
-    cursor: pointer; font-family: 'Inter', sans-serif;
-    font-size: 13px; font-weight: 500; transition: all 0.2s;
-  }
-  .btn-primary {
-    background: linear-gradient(135deg, var(--emerald), #059669);
-    color: white; box-shadow: 0 4px 16px rgba(16,185,129,0.3);
-  }
+  .btn { padding: 9px 20px; border-radius: 10px; border: none; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; transition: all 0.2s; }
+  .btn-primary { background: linear-gradient(135deg, var(--emerald), #059669); color: white; box-shadow: 0 4px 16px rgba(16,185,129,0.3); }
   .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(16,185,129,0.45); }
-  .btn-ghost {
-    background: var(--white-faint); color: var(--white-dim);
-    border: 1px solid var(--glass-border);
-  }
+  .btn-ghost { background: var(--white-faint); color: var(--white-dim); border: 1px solid var(--glass-border); }
   .btn-ghost:hover { background: rgba(240,253,244,0.15); color: var(--white); }
   .btn-danger { background: rgba(248,113,113,0.15); color: var(--danger); border: 1px solid rgba(248,113,113,0.3); }
   .btn-danger:hover { background: rgba(248,113,113,0.28); }
@@ -113,15 +67,7 @@
   .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 8px; }
   .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
 
-  /* ===== PAGES ===== */
-  .page { display: none; }
-  .page.active { display: block; }
-
   /* ===== AUTH ===== */
-  #page-auth {
-    min-height: 100vh; display: flex;
-    align-items: center; justify-content: center; padding: 40px 20px;
-  }
   .auth-card { width: 100%; max-width: 420px; padding: 44px 36px; }
   .auth-logo { text-align: center; margin-bottom: 32px; }
   .auth-logo .logo-icon { width: 60px; height: 60px; font-size: 28px; margin: 0 auto 14px; box-shadow: 0 0 36px rgba(16,185,129,0.5); }
@@ -133,20 +79,12 @@
   .form-group { margin-bottom: 16px; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   label { display: block; font-size: 11px; font-weight: 500; color: var(--text-muted); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 1px; }
-  input {
-    width: 100%; padding: 12px 14px;
-    background: var(--white-faint); border: 1px solid var(--glass-border);
-    border-radius: 10px; color: var(--white);
-    font-family: 'Inter', sans-serif; font-size: 14px;
-    transition: all 0.2s; outline: none;
-  }
+  input { width: 100%; padding: 12px 14px; background: var(--white-faint); border: 1px solid var(--glass-border); border-radius: 10px; color: var(--white); font-family: 'Inter', sans-serif; font-size: 14px; transition: all 0.2s; outline: none; }
   input::placeholder { color: var(--text-muted); }
   input:focus { border-color: var(--emerald); background: rgba(16,185,129,0.08); box-shadow: 0 0 0 3px rgba(16,185,129,0.12); }
   .form-submit { width: 100%; padding: 13px; font-size: 14px; font-weight: 600; margin-top: 6px; }
 
-  /* ===== APP ===== */
-  #page-app { display: none; }
-  #page-app.active { display: flex; flex-direction: column; min-height: 100vh; }
+  /* ===== APP BODY ===== */
   .app-body { flex: 1; padding: 28px 32px; max-width: 1300px; margin: 0 auto; width: 100%; }
 
   /* NAV */
@@ -181,98 +119,43 @@
   .legend-dot { width: 14px; height: 14px; border-radius: 5px; }
 
   /* ===== GRID ===== */
-  .grid-container {
-    overflow-x: auto;
-    border-radius: 16px;
-    border: 1px solid var(--glass-border);
-    background: rgba(10,26,14,0.6);
-    backdrop-filter: blur(16px);
-  }
+  .grid-container { overflow-x: auto; border-radius: 16px; border: 1px solid var(--glass-border); background: rgba(10,26,14,0.6); backdrop-filter: blur(16px); }
+  .resa-grid { display: grid; grid-template-columns: 70px repeat(5, 1fr); min-width: 600px; }
 
-  .resa-grid {
-    display: grid;
-    grid-template-columns: 70px repeat(5, 1fr);
-    min-width: 600px;
-  }
-
-  /* COURT HEADERS */
-  .grid-court-header {
-    padding: 14px 10px;
-    text-align: center;
-    border-bottom: 1px solid var(--glass-border);
-    font-size: 13px;
-    font-weight: 700;
-  }
-  .grid-court-header.tennis-header {
-    background: rgba(212,175,55,0.12);
-    border-right: 1px solid rgba(212,175,55,0.2);
-    color: var(--gold);
-  }
-  .grid-court-header.pickle-header {
-    background: rgba(52,211,153,0.08);
-    border-right: 1px solid rgba(52,211,153,0.1);
-    color: var(--emerald-bright);
-  }
+  .grid-court-header { padding: 14px 10px; text-align: center; border-bottom: 1px solid var(--glass-border); font-size: 13px; font-weight: 700; }
+  .grid-court-header.tennis-header { background: rgba(212,175,55,0.12); border-right: 1px solid rgba(212,175,55,0.2); color: var(--gold); }
+  .grid-court-header.pickle-header { background: rgba(52,211,153,0.08); border-right: 1px solid rgba(52,211,153,0.1); color: var(--emerald-bright); }
   .grid-court-header.pickle-header:last-child { border-right: none; }
-  .grid-court-header.time-header {
-    background: transparent;
-    border-right: 1px solid var(--glass-border);
-    border-bottom: 1px solid var(--glass-border);
-  }
+  .grid-court-header.time-header { background: transparent; border-right: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
   .court-icon { font-size: 20px; display: block; margin-bottom: 4px; }
   .court-name { font-size: 12px; letter-spacing: 0.5px; }
 
-  /* TIME LABEL */
-  .grid-time {
-    padding: 0 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 600;
-    color: var(--text-muted);
-    border-right: 1px solid var(--glass-border);
-    border-bottom: 1px solid rgba(240,253,244,0.04);
-    min-height: 58px;
-    letter-spacing: 0.3px;
-  }
+  .grid-time { padding: 0 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--text-muted); border-right: 1px solid var(--glass-border); border-bottom: 1px solid rgba(240,253,244,0.04); min-height: 58px; }
 
-  /* SLOT CELLS */
-  .grid-slot {
-    min-height: 58px;
-    display: flex; align-items: center; justify-content: center;
-    border-right: 1px solid rgba(240,253,244,0.05);
-    border-bottom: 1px solid rgba(240,253,244,0.04);
-    transition: all 0.18s;
-    position: relative;
-    padding: 6px;
-  }
+  .grid-slot { min-height: 58px; display: flex; align-items: center; justify-content: center; border-right: 1px solid rgba(240,253,244,0.05); border-bottom: 1px solid rgba(240,253,244,0.04); transition: all 0.18s; padding: 6px; }
   .grid-slot:last-child { border-right: none; }
 
-  /* Libre tennis */
   .slot-libre-tennis { background: rgba(212,175,55,0.07); cursor: pointer; }
   .slot-libre-tennis:hover { background: rgba(212,175,55,0.22); box-shadow: inset 0 0 0 2px rgba(212,175,55,0.6); }
   .slot-libre-tennis .slot-inner { color: rgba(212,175,55,0.65); }
   .slot-libre-tennis:hover .slot-inner { color: var(--gold); }
 
-  /* Libre pickleball */
   .slot-libre-pickle { background: rgba(52,211,153,0.06); cursor: pointer; }
   .slot-libre-pickle:hover { background: rgba(52,211,153,0.2); box-shadow: inset 0 0 0 2px rgba(52,211,153,0.5); }
   .slot-libre-pickle .slot-inner { color: rgba(52,211,153,0.55); }
   .slot-libre-pickle:hover .slot-inner { color: var(--emerald-bright); }
 
-  /* Réservé par quelqu'un d'autre */
   .slot-pris { background: rgba(240,253,244,0.02); cursor: not-allowed; }
   .slot-pris .slot-inner { color: rgba(240,253,244,0.2); }
 
-  /* Bloqué (règle tennis/pickle) */
   .slot-bloque { background: rgba(248,113,113,0.07); cursor: not-allowed; }
   .slot-bloque .slot-inner { color: rgba(248,113,113,0.45); }
 
-  /* Ma réservation tennis */
   .slot-mien-tennis { background: rgba(212,175,55,0.18); box-shadow: inset 0 0 0 2px var(--gold); cursor: pointer; }
   .slot-mien-tennis .slot-inner { color: var(--gold); font-weight: 700; }
   .slot-mien-tennis:hover { background: rgba(248,113,113,0.18); box-shadow: inset 0 0 0 2px var(--danger); }
   .slot-mien-tennis:hover .slot-inner { color: var(--danger); }
 
-  /* Ma réservation pickleball */
   .slot-mien-pickle { background: rgba(52,211,153,0.18); box-shadow: inset 0 0 0 2px var(--emerald); cursor: pointer; }
   .slot-mien-pickle .slot-inner { color: var(--emerald-bright); font-weight: 700; }
   .slot-mien-pickle:hover { background: rgba(248,113,113,0.18); box-shadow: inset 0 0 0 2px var(--danger); }
@@ -354,39 +237,29 @@
 
   <!-- ===== AUTH ===== -->
   <div id="page-auth" class="page active">
-    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;">
-      <div class="auth-card glass">
-        <div class="auth-logo">
-          <div class="logo-icon" style="width:60px;height:60px;font-size:28px;margin:0 auto 14px;box-shadow:0 0 36px rgba(16,185,129,0.5)">🎾</div>
-          <h1>RacketHub</h1>
-          <p>Tennis & Pickleball — Le Perreux</p>
+    <div class="auth-card glass">
+      <div class="auth-logo">
+        <div class="logo-icon" style="width:60px;height:60px;font-size:28px;margin:0 auto 14px;box-shadow:0 0 36px rgba(16,185,129,0.5)">🎾</div>
+        <h1>RacketHub</h1>
+        <p>Tennis & Pickleball — Le Perreux</p>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuthTab('login')">Connexion</button>
+        <button class="auth-tab" onclick="switchAuthTab('register')">Inscription</button>
+      </div>
+      <div id="form-login">
+        <div class="form-group"><label>Email</label><input type="email" id="login-email" placeholder="votre@email.com" /></div>
+        <div class="form-group"><label>Mot de passe</label><input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" /></div>
+        <button class="btn btn-primary form-submit" onclick="doLogin()">Se connecter</button>
+      </div>
+      <div id="form-register" style="display:none">
+        <div class="form-row">
+          <div class="form-group"><label>Nom</label><input type="text" id="reg-nom" placeholder="Dupont" /></div>
+          <div class="form-group"><label>Prénom</label><input type="text" id="reg-prenom" placeholder="Jean" /></div>
         </div>
-        <div class="auth-tabs">
-          <button class="auth-tab active" onclick="switchAuthTab('login')">Connexion</button>
-          <button class="auth-tab" onclick="switchAuthTab('register')">Inscription</button>
-        </div>
-        <!-- LOGIN -->
-        <div id="form-login">
-          <div class="form-group">
-            <label>Email</label>
-            <input type="email" id="login-email" placeholder="votre@email.com" />
-          </div>
-          <div class="form-group">
-            <label>Mot de passe</label>
-            <input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" />
-          </div>
-          <button class="btn btn-primary form-submit" onclick="doLogin()">Se connecter</button>
-        </div>
-        <!-- REGISTER -->
-        <div id="form-register" style="display:none">
-          <div class="form-row">
-            <div class="form-group"><label>Nom</label><input type="text" id="reg-nom" placeholder="Dupont" /></div>
-            <div class="form-group"><label>Prénom</label><input type="text" id="reg-prenom" placeholder="Jean" /></div>
-          </div>
-          <div class="form-group"><label>Email</label><input type="email" id="reg-email" placeholder="votre@email.com" /></div>
-          <div class="form-group"><label>Mot de passe</label><input type="password" id="reg-password" placeholder="Minimum 8 caractères" /></div>
-          <button class="btn btn-primary form-submit" onclick="doRegister()">Créer mon compte</button>
-        </div>
+        <div class="form-group"><label>Email</label><input type="email" id="reg-email" placeholder="votre@email.com" /></div>
+        <div class="form-group"><label>Mot de passe</label><input type="password" id="reg-password" placeholder="Minimum 8 caractères" /></div>
+        <button class="btn btn-primary form-submit" onclick="doRegister()">Créer mon compte</button>
       </div>
     </div>
   </div>
@@ -421,13 +294,11 @@
       <div id="section-reserver">
         <div class="section-title">Réserver un court</div>
         <div class="section-sub">1 terrain tennis · 4 terrains pickleball · Créneaux 1h de 9h à 20h</div>
-
         <div class="quota-bar">
           <span class="quota-label">Réservations cette semaine</span>
           <div class="quota-dots" id="quota-dots"></div>
           <span class="quota-text" id="quota-text">0 / 3</span>
         </div>
-
         <div class="calendar-controls">
           <div class="date-nav">
             <button onclick="changeDate(-1)">‹</button>
@@ -436,7 +307,6 @@
           </div>
           <button class="btn-today" onclick="goToday()">Aujourd'hui</button>
         </div>
-
         <div class="legend">
           <div class="legend-item"><div class="legend-dot" style="background:rgba(212,175,55,0.2);border:1px solid rgba(212,175,55,0.5)"></div>Libre (tennis)</div>
           <div class="legend-item"><div class="legend-dot" style="background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.4)"></div>Libre (pickleball)</div>
@@ -444,7 +314,6 @@
           <div class="legend-item"><div class="legend-dot" style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.4)"></div>🔒 Bloqué</div>
           <div class="legend-item"><div class="legend-dot" style="background:rgba(240,253,244,0.03);border:1px solid rgba(240,253,244,0.1)"></div>Réservé</div>
         </div>
-
         <div class="grid-container">
           <div class="resa-grid" id="resa-grid">
             <div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--text-muted)">
@@ -503,15 +372,9 @@
 <div id="toast"></div>
 
 <script>
-// ============================================================
-// CONFIG
-// ============================================================
 const API_URL = 'https://script.google.com/macros/s/AKfycbzPo8ewlWvyr5wXml2OKD-Fe9fYK_0PxcZeK_J2GR7G_bNARDzbu9jiBHL1KhV1nCaK/exec';
 const CRENEAUX = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'];
 
-// ============================================================
-// STATE
-// ============================================================
 let state = {
   token: localStorage.getItem('token') || null,
   membre: JSON.parse(localStorage.getItem('membre') || 'null'),
@@ -530,13 +393,11 @@ async function api(action, params = {}) {
     const callbackName = 'cb_' + Math.random().toString(36).substr(2, 9);
     const allParams = { action, token: state.token || '', callback: callbackName, ...params };
     const urlParams = new URLSearchParams(allParams);
-
     window[callbackName] = function(data) {
       resolve(data);
       delete window[callbackName];
       document.getElementById(callbackName)?.remove();
     };
-
     const script = document.createElement('script');
     script.id = callbackName;
     script.src = API_URL + '?' + urlParams.toString();
@@ -690,30 +551,17 @@ async function loadSlots() {
     api('getMesReservations')
   ]);
 
-  // Debug temporaire — à retirer après
-  console.log('resSlots brut:', JSON.stringify(resSlots));
-  console.log('resMes brut:', JSON.stringify(resMes));
-
-  // Normaliser slotsData — chercher les créneaux à tous les niveaux possibles
-  if (resSlots && resSlots.data && resSlots.data.data) {
-    state.slotsData = resSlots.data.data;         // { success, data: { success, data: {...} } }
-  } else if (resSlots && resSlots.data && resSlots.data['09:00'] !== undefined) {
-    state.slotsData = resSlots.data;              // { success, data: { '09:00': {...} } }
+  // Normaliser slotsData
+  if (resSlots && resSlots.data && resSlots.data['09:00'] !== undefined) {
+    state.slotsData = resSlots.data;
   } else if (resSlots && resSlots['09:00'] !== undefined) {
-    state.slotsData = resSlots;                   // { '09:00': {...} } direct
-  } else if (resSlots && resSlots.success && resSlots.data) {
-    // Cas où data contient lui-même success+data imbriqués
-    const inner = resSlots.data;
-    if (inner && inner.data) state.slotsData = inner.data;
-    else state.slotsData = inner;
+    state.slotsData = resSlots;
   } else {
     state.slotsData = {};
   }
 
   // Normaliser mesResas
-  if (resMes && resMes.data && resMes.data.data && Array.isArray(resMes.data.data)) {
-    state.mesResas = resMes.data.data;
-  } else if (resMes && resMes.data && Array.isArray(resMes.data)) {
+  if (resMes && resMes.data && Array.isArray(resMes.data)) {
     state.mesResas = resMes.data;
   } else if (Array.isArray(resMes)) {
     state.mesResas = resMes;
@@ -721,29 +569,27 @@ async function loadSlots() {
     state.mesResas = [];
   }
 
-  console.log('slotsData normalisé:', JSON.stringify(state.slotsData));
-  console.log('mesResas normalisé:', state.mesResas);
-
   renderGrid();
   renderQuota();
 }
 
 // ============================================================
-// HELPER : ma réservation sur ce créneau/court ?
+// HELPER
 // ============================================================
 function getMesResaId(date, creneau, sport, court) {
   if (!Array.isArray(state.mesResas)) return null;
   const r = state.mesResas.find(r =>
-    r.date === date &&
-    r.creneau === creneau &&
-    r.sport === sport &&
-    r.court === court
+    r.date === date && r.creneau === creneau && r.sport === sport && r.court === court
   );
   return r ? r.id : null;
 }
 
 // ============================================================
 // RENDER GRID
+// La logique de blocage repose UNIQUEMENT sur les données Apps Script :
+// - tennis:false + au moins un pickle:false = un pickle est réservé → tennis bloqué, autres pickles libres
+// - tennis:false + tous pickles:true = tennis vraiment réservé → tous pickles bloqués
+// - pickle[X]:false = ce court est réservé (par moi ou quelqu'un d'autre)
 // ============================================================
 function renderGrid() {
   const grid = document.getElementById('resa-grid');
@@ -752,6 +598,7 @@ function renderGrid() {
 
   let html = '';
 
+  // En-têtes
   html += `<div class="grid-court-header time-header"></div>`;
   html += `<div class="grid-court-header tennis-header"><span class="court-icon">🎾</span><span class="court-name">Tennis</span></div>`;
   ['P1','P2','P3','P4'].forEach((p, i) => {
@@ -761,68 +608,63 @@ function renderGrid() {
   CRENEAUX.forEach(creneau => {
     html += `<div class="grid-time">${creneau}</div>`;
 
-    const slotData = slots[creneau] || null;
+    const s = slots[creneau] || null;
     const mienTennis = getMesResaId(dateStr, creneau, 'tennis', 'tennis');
 
-	// Au moins un pickleball est réservé = au moins un pickleball est false
-	const auMoinsUnPickleFalse = slotData && slotData.pickleball &&
-	['P1','P2','P3','P4'].some(c => slotData.pickleball[c] === false);
+    // Est-ce qu'au moins un court pickleball est pris (false) dans les données ?
+    const auMoinsUnPicklePris = s && s.pickleball &&
+      ['P1','P2','P3','P4'].some(c => s.pickleball[c] === false);
 
-	// tennis:false causé par une vraie résa tennis
-	// = tennis:false ET tous les pickleballs sont true (aucun pickleball reservé)
-	const vraiTennisPris = slotData &&
-	slotData.tennis === false &&
-	['P1','P2','P3','P4'].every(c => slotData.pickleball[c] === true);
-  
-    // ===== COLONNE TENNIS =====
+    // Tennis vraiment réservé = tennis:false ET aucun pickleball n'est false
+    // (car si un pickle est réservé, Apps Script met aussi tennis:false)
+    const vraiTennisPris = s && s.tennis === false && !auMoinsUnPicklePris && !mienTennis;
+
+    // ===== TENNIS =====
     let clsT, iconT, txtT, onclickT = '';
-
     if (mienTennis) {
       clsT = 'grid-slot slot-mien-tennis';
       iconT = '✓'; txtT = 'Réservé';
       onclickT = `cancelSlot('${mienTennis}','${creneau}','Tennis','tennis','tennis')`;
-    } else if (auMoinsUnPickleFalse) {
-      // Au moins un pickleball est réservé → tennis bloqué
+    } else if (auMoinsUnPicklePris) {
+      // Un pickleball est réservé → tennis bloqué
       clsT = 'grid-slot slot-bloque';
       iconT = '🔒'; txtT = 'Bloqué';
     } else if (vraiTennisPris) {
-      // Tennis directement réservé par quelqu'un d'autre
+      // Tennis réservé par quelqu'un d'autre
       clsT = 'grid-slot slot-pris';
       iconT = '✗'; txtT = 'Réservé';
     } else {
-      // Tennis libre
+      // Libre
       clsT = 'grid-slot slot-libre-tennis';
       iconT = '🎾'; txtT = 'Libre';
       onclickT = `bookSlot('${dateStr}','${creneau}','tennis','tennis')`;
     }
+    html += `<div class="${clsT}" ${onclickT?`onclick="${onclickT}"`:''}><div class="slot-inner"><span class="slot-icon-sm">${iconT}</span><span class="slot-text">${txtT}</span></div></div>`;
 
-    html += `<div class="${clsT}" ${onclickT ? `onclick="${onclickT}"` : ''}>
-      <div class="slot-inner"><span class="slot-icon-sm">${iconT}</span><span class="slot-text">${txtT}</span></div>
-    </div>`;
-
-    // ===== COLONNES PICKLEBALL =====
-    ['P1','P2','P3','P4'].forEach((court) => {
-      const mienPickle     = getMesResaId(dateStr, creneau, 'pickleball', court);
-      const pickleEstLibre = slotData && slotData.pickleball && slotData.pickleball[court] === true;
-      const pickleEstPris  = slotData && slotData.pickleball && slotData.pickleball[court] === false;
+    // ===== PICKLEBALLS =====
+    ['P1','P2','P3','P4'].forEach(court => {
+      const mienPickle = getMesResaId(dateStr, creneau, 'pickleball', court);
+      // Apps Script : true = libre, false = pris
+      const estLibre = s && s.pickleball && s.pickleball[court] === true;
+      const estPris  = s && s.pickleball && s.pickleball[court] === false;
 
       let clsP, iconP, txtP, onclickP = '';
 
       if (mienPickle) {
-        // Ma réservation pickleball
+        // Ma réservation sur ce court
         clsP = 'grid-slot slot-mien-pickle';
         iconP = '✓'; txtP = 'Réservé';
         onclickP = `cancelSlot('${mienPickle}','${creneau}','Pickleball ${court}','pickleball','${court}')`;
       } else if (vraiTennisPris) {
-        // Vrai tennis réservé → tous les pickleballs bloqués
+        // Tennis réservé → tous pickles bloqués
         clsP = 'grid-slot slot-bloque';
         iconP = '🔒'; txtP = 'Bloqué';
-      } else if (pickleEstPris) {
-        // Ce court pickleball pris par quelqu'un d'autre
+      } else if (estPris) {
+        // Ce court pris par quelqu'un d'autre
         clsP = 'grid-slot slot-pris';
         iconP = '✗'; txtP = 'Réservé';
-      } else if (pickleEstLibre) {
-        // Libre !
+      } else if (estLibre) {
+        // Libre
         clsP = 'grid-slot slot-libre-pickle';
         iconP = '🏓'; txtP = 'Libre';
         onclickP = `bookSlot('${dateStr}','${creneau}','pickleball','${court}')`;
@@ -831,9 +673,7 @@ function renderGrid() {
         iconP = '—'; txtP = '';
       }
 
-      html += `<div class="${clsP}" ${onclickP ? `onclick="${onclickP}"` : ''}>
-        <div class="slot-inner"><span class="slot-icon-sm">${iconP}</span><span class="slot-text">${txtP}</span></div>
-      </div>`;
+      html += `<div class="${clsP}" ${onclickP?`onclick="${onclickP}"`:''}><div class="slot-inner"><span class="slot-icon-sm">${iconP}</span><span class="slot-text">${txtP}</span></div></div>`;
     });
   });
 
@@ -848,18 +688,12 @@ function bookSlot(date, creneau, sport, court) {
   const dateLabel = new Date(date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
   const hFin = String(parseInt(creneau) + 1).padStart(2,'0') + ':00';
   openModal(
-    'Confirmer la réservation',
-    'Voulez-vous réserver ce créneau ?',
-    `${courtLabel} · ${creneau}–${hFin} · ${dateLabel}`,
-    'Réserver',
+    'Confirmer la réservation', 'Voulez-vous réserver ce créneau ?',
+    `${courtLabel} · ${creneau}–${hFin} · ${dateLabel}`, 'Réserver',
     async () => {
       const res = await api('creerReservation', { date, creneau, sport, court });
-      if (res && res.success) {
-        toast('Réservation confirmée ! 🎾', 'success');
-        loadSlots();
-      } else {
-        toast(res?.message || 'Erreur lors de la réservation', 'error');
-      }
+      if (res && res.success) { toast('Réservation confirmée ! 🎾', 'success'); loadSlots(); }
+      else toast(res?.message || 'Erreur lors de la réservation', 'error');
     }
   );
 }
@@ -867,19 +701,15 @@ function bookSlot(date, creneau, sport, court) {
 function cancelSlot(resaId, creneau, courtLabel, sport, court) {
   const hFin = String(parseInt(creneau) + 1).padStart(2,'0') + ':00';
   openModal(
-    'Annuler la réservation',
-    'Voulez-vous annuler ce créneau ?',
-    `${courtLabel} · ${creneau}–${hFin}`,
-    'Annuler la réservation',
+    'Annuler la réservation', 'Voulez-vous annuler ce créneau ?',
+    `${courtLabel} · ${creneau}–${hFin}`, 'Annuler la réservation',
     async () => {
       const res = await api('annulerReservation', { reservationId: resaId });
       if (res && res.success) {
         toast('Réservation annulée', 'info');
         loadSlots();
         if (document.getElementById('section-mes-resas').style.display !== 'none') loadMesResas();
-      } else {
-        toast(res?.message || 'Erreur lors de l\'annulation', 'error');
-      }
+      } else toast(res?.message || 'Erreur', 'error');
     },
     'btn-danger'
   );
@@ -909,8 +739,8 @@ function renderQuota() {
 async function loadMesResas() {
   document.getElementById('mes-resas-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   const res = await api('getMesReservations');
-  if (Array.isArray(res)) state.mesResas = res;
-  else if (res && Array.isArray(res.data)) state.mesResas = res.data;
+  if (res && res.data && Array.isArray(res.data)) state.mesResas = res.data;
+  else if (Array.isArray(res)) state.mesResas = res;
   else state.mesResas = [];
   renderMesResas();
   renderQuota();
@@ -957,7 +787,7 @@ function showAdminTab(tab) {
 async function loadAdminMembres() {
   document.getElementById('membres-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   const res = await api('getTousMembres');
-  const membres = Array.isArray(res) ? res : (res?.data || []);
+  const membres = (res && res.data && Array.isArray(res.data)) ? res.data : (Array.isArray(res) ? res : []);
   if (!membres.length) { document.getElementById('membres-content').innerHTML = '<div class="empty-state"><div class="icon">👥</div><h3>Aucun membre</h3></div>'; return; }
   document.getElementById('membres-content').innerHTML = `<div class="table-wrapper"><table class="members-table">
     <thead><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Statut</th><th>Actions</th></tr></thead>
@@ -978,7 +808,7 @@ async function loadAdminMembres() {
 async function loadAdminAttente() {
   document.getElementById('attente-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   const res = await api('getMembresEnAttente');
-  const membres = Array.isArray(res) ? res : (res?.data || []);
+  const membres = (res && res.data && Array.isArray(res.data)) ? res.data : (Array.isArray(res) ? res : []);
   if (!membres.length) { document.getElementById('attente-content').innerHTML = '<div class="empty-state"><div class="icon">✅</div><h3>Aucun compte en attente</h3></div>'; return; }
   document.getElementById('attente-content').innerHTML = `<div class="resas-grid">${membres.map(m => `
     <div class="glass-bright" style="padding:20px">
@@ -994,7 +824,7 @@ async function loadAdminAttente() {
 async function loadAdminResas() {
   document.getElementById('admin-resas-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   const res = await api('getToutesReservations', { date: formatDate(state.adminDate) });
-  const resas = Array.isArray(res) ? res : (res?.data || []);
+  const resas = (res && res.data && Array.isArray(res.data)) ? res.data : (Array.isArray(res) ? res : []);
   if (!resas.length) { document.getElementById('admin-resas-content').innerHTML = '<div class="empty-state"><div class="icon">📋</div><h3>Aucune réservation ce jour</h3></div>'; return; }
   document.getElementById('admin-resas-content').innerHTML = `<div class="table-wrapper"><table class="members-table">
     <thead><tr><th>Membre</th><th>Créneau</th><th>Sport</th><th>Court</th><th>Action</th></tr></thead>
