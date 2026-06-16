@@ -764,13 +764,16 @@ function renderGrid() {
     const slotData = slots[creneau] || null;
     const mienTennis = getMesResaId(dateStr, creneau, 'tennis', 'tennis');
 
-    // Y a-t-il au moins un pickleball false dans les données ?
-    const auMoinsUnPickleFalse = slotData && slotData.pickleball &&
-      ['P1','P2','P3','P4'].some(c => slotData.pickleball[c] === false);
+	// Au moins un pickleball est réservé = au moins un pickleball est false
+	const auMoinsUnPickleFalse = slotData && slotData.pickleball &&
+	['P1','P2','P3','P4'].some(c => slotData.pickleball[c] === false);
 
-    // tennis:false causé par une vraie résa tennis = tennis:false ET aucun pickleball n'est false
-    const vraiTennisPris = slotData && slotData.tennis === false && !auMoinsUnPickleFalse;
-
+	// tennis:false causé par une vraie résa tennis
+	// = tennis:false ET tous les pickleballs sont true (aucun pickleball reservé)
+	const vraiTennisPris = slotData &&
+	slotData.tennis === false &&
+	['P1','P2','P3','P4'].every(c => slotData.pickleball[c] === true);
+  
     // ===== COLONNE TENNIS =====
     let clsT, iconT, txtT, onclickT = '';
 
