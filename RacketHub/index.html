@@ -690,15 +690,39 @@ async function loadSlots() {
     api('getMesReservations')
   ]);
 
-  // Normaliser slotsData
-  if (resSlots && resSlots.data) state.slotsData = resSlots.data;
-  else if (resSlots && typeof resSlots === 'object' && resSlots['09:00'] !== undefined) state.slotsData = resSlots;
-  else state.slotsData = {};
+  // Debug temporaire — à retirer après
+  console.log('resSlots brut:', JSON.stringify(resSlots));
+  console.log('resMes brut:', JSON.stringify(resMes));
+
+  // Normaliser slotsData — chercher les créneaux à tous les niveaux possibles
+  if (resSlots && resSlots.data && resSlots.data.data) {
+    state.slotsData = resSlots.data.data;         // { success, data: { success, data: {...} } }
+  } else if (resSlots && resSlots.data && resSlots.data['09:00'] !== undefined) {
+    state.slotsData = resSlots.data;              // { success, data: { '09:00': {...} } }
+  } else if (resSlots && resSlots['09:00'] !== undefined) {
+    state.slotsData = resSlots;                   // { '09:00': {...} } direct
+  } else if (resSlots && resSlots.success && resSlots.data) {
+    // Cas où data contient lui-même success+data imbriqués
+    const inner = resSlots.data;
+    if (inner && inner.data) state.slotsData = inner.data;
+    else state.slotsData = inner;
+  } else {
+    state.slotsData = {};
+  }
 
   // Normaliser mesResas
-  if (Array.isArray(resMes)) state.mesResas = resMes;
-  else if (resMes && Array.isArray(resMes.data)) state.mesResas = resMes.data;
-  else state.mesResas = [];
+  if (resMes && resMes.data && resMes.data.data && Array.isArray(resMes.data.data)) {
+    state.mesResas = resMes.data.data;
+  } else if (resMes && resMes.data && Array.isArray(resMes.data)) {
+    state.mesResas = resMes.data;
+  } else if (Array.isArray(resMes)) {
+    state.mesResas = resMes;
+  } else {
+    state.mesResas = [];
+  }
+
+  console.log('slotsData normalisé:', JSON.stringify(state.slotsData));
+  console.log('mesResas normalisé:', state.mesResas);
 
   renderGrid();
   renderQuota();
