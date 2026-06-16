@@ -759,47 +759,45 @@ function renderGrid() {
     html += `<div class="grid-court-header pickle-header"><span class="court-icon">🏓</span><span class="court-name">Pickleball ${i+1}</span></div>`;
   });
 
-  // Lignes de créneaux
   CRENEAUX.forEach(creneau => {
     html += `<div class="grid-time">${creneau}</div>`;
 
     const slotData = slots[creneau] || null;
 
-    // --- États du créneau ---
-    // Tennis : true = libre, false = pris
-    const tennisEstLibre  = slotData && slotData.tennis === true;
-    const tennisEstPris   = slotData && slotData.tennis === false;
-    const mienTennis      = getMesResaId(dateStr, creneau, 'tennis', 'tennis');
+    const tennisEstLibre = slotData && slotData.tennis === true;
+    const tennisEstPris  = slotData && slotData.tennis === false;
+    const mienTennis     = getMesResaId(dateStr, creneau, 'tennis', 'tennis');
 
-    // Y a-t-il au moins un pickleball pris (par quelqu'un d'autre) ?
+    // Un pickleball pris par quelqu'un d'autre (pas moi) → bloque tennis
     const pickleballPrisParAutre = slotData && slotData.pickleball &&
       ['P1','P2','P3','P4'].some(c =>
-        slotData.pickleball[c] === false && !getMesResaId(dateStr, creneau, 'pickleball', c)
+        slotData.pickleball[c] === false &&
+        !getMesResaId(dateStr, creneau, 'pickleball', c)
       );
+
+    // Tennis pris par quelqu'un d'autre (pas moi) → bloque pickleballs
+    // IMPORTANT : tennis=false peut être causé par un pickleball réservé
+    // On vérifie qu'il y a vraiment une resa tennis (pas juste le blocage logique)
+    const tennisReserveParAutre = tennisEstPris && !mienTennis && !pickleballPrisParAutre;
 
     // ===== COLONNE TENNIS =====
     let clsT, iconT, txtT, onclickT = '';
 
     if (mienTennis) {
-      // C'est ma réservation → afficher en or, clic = annuler
       clsT = 'grid-slot slot-mien-tennis';
       iconT = '✓'; txtT = 'Réservé';
       onclickT = `cancelSlot('${mienTennis}','${creneau}','Tennis','tennis','tennis')`;
     } else if (pickleballPrisParAutre) {
-      // Un pickleball est réservé → tennis bloqué
       clsT = 'grid-slot slot-bloque';
       iconT = '🔒'; txtT = 'Bloqué';
     } else if (tennisEstPris) {
-      // Tennis pris par quelqu'un d'autre
       clsT = 'grid-slot slot-pris';
       iconT = '✗'; txtT = 'Réservé';
     } else if (tennisEstLibre) {
-      // Tennis libre
       clsT = 'grid-slot slot-libre-tennis';
       iconT = '🎾'; txtT = 'Libre';
       onclickT = `bookSlot('${dateStr}','${creneau}','tennis','tennis')`;
     } else {
-      // Pas de données (créneau passé ou erreur)
       clsT = 'grid-slot slot-pris';
       iconT = '—'; txtT = '';
     }
@@ -809,23 +807,20 @@ function renderGrid() {
     </div>`;
 
     // ===== COLONNES PICKLEBALL =====
-    ['P1','P2','P3','P4'].forEach((court, idx) => {
-      const mienPickle    = getMesResaId(dateStr, creneau, 'pickleball', court);
+    ['P1','P2','P3','P4'].forEach((court) => {
+      const mienPickle     = getMesResaId(dateStr, creneau, 'pickleball', court);
       const pickleEstLibre = slotData && slotData.pickleball && slotData.pickleball[court] === true;
       const pickleEstPris  = slotData && slotData.pickleball && slotData.pickleball[court] === false;
-
-      // Tennis pris par quelqu'un d'autre (pas par moi) → bloque les pickleballs
-      const tennisBloquePicle = tennisEstPris && !mienTennis;
 
       let clsP, iconP, txtP, onclickP = '';
 
       if (mienPickle) {
-        // C'est ma réservation → afficher en vert, clic = annuler
+        // Ma réservation pickleball
         clsP = 'grid-slot slot-mien-pickle';
         iconP = '✓'; txtP = 'Réservé';
         onclickP = `cancelSlot('${mienPickle}','${creneau}','Pickleball ${court}','pickleball','${court}')`;
-      } else if (tennisBloquePicle) {
-        // Tennis réservé par quelqu'un → pickleball bloqué
+      } else if (tennisReserveParAutre) {
+        // Tennis réservé par quelqu'un d'autre → ce pickleball bloqué
         clsP = 'grid-slot slot-bloque';
         iconP = '🔒'; txtP = 'Bloqué';
       } else if (pickleEstPris) {
