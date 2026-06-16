@@ -399,16 +399,27 @@ async function api(action, params = {}) {
     const callbackName = 'cb_' + Math.random().toString(36).substr(2, 9);
     const allParams = { action, token: state.token || '', callback: callbackName, ...params };
     const urlParams = new URLSearchParams(allParams);
+
+    // Timeout de 15 secondes
+    const timeout = setTimeout(() => {
+      resolve({ success: false, message: 'Délai dépassé — vérifiez votre connexion' });
+      delete window[callbackName];
+      document.getElementById(callbackName)?.remove();
+    }, 15000);
+
     window[callbackName] = function(data) {
+      clearTimeout(timeout);
       resolve(data);
       delete window[callbackName];
       document.getElementById(callbackName)?.remove();
     };
+
     const script = document.createElement('script');
     script.id = callbackName;
     script.src = API_URL + '?' + urlParams.toString();
     script.onerror = function() {
-      resolve({ success: false, message: 'Erreur réseau' });
+      clearTimeout(timeout);
+      resolve({ success: false, message: 'Erreur réseau — vérifiez votre connexion' });
       delete window[callbackName];
       script.remove();
     };
