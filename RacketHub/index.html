@@ -752,7 +752,6 @@ function renderGrid() {
 
   let html = '';
 
-  // En-têtes colonnes
   html += `<div class="grid-court-header time-header"></div>`;
   html += `<div class="grid-court-header tennis-header"><span class="court-icon">🎾</span><span class="court-name">Tennis</span></div>`;
   ['P1','P2','P3','P4'].forEach((p, i) => {
@@ -768,17 +767,24 @@ function renderGrid() {
     const tennisEstPris  = slotData && slotData.tennis === false;
     const mienTennis     = getMesResaId(dateStr, creneau, 'tennis', 'tennis');
 
-    // Un pickleball pris par quelqu'un d'autre (pas moi) → bloque tennis
-    const pickleballPrisParAutre = slotData && slotData.pickleball &&
+    // Apps Script met tennis:false quand un pickleball est réservé
+    // Il faut distinguer : tennis réservé PAR QUELQU'UN vs bloqué à cause d'un pickleball
+    // Si tennis:false ET au moins un pickleball est false ET ce pickleball n'est pas le mien
+    // → c'est un pickleball tiers qui bloque le tennis
+    const pickleReservePar3 = slotData && slotData.pickleball &&
       ['P1','P2','P3','P4'].some(c =>
         slotData.pickleball[c] === false &&
         !getMesResaId(dateStr, creneau, 'pickleball', c)
       );
 
-    // Tennis pris par quelqu'un d'autre (pas moi) → bloque pickleballs
-    // IMPORTANT : tennis=false peut être causé par un pickleball réservé
-    // On vérifie qu'il y a vraiment une resa tennis (pas juste le blocage logique)
-    const tennisReserveParAutre = tennisEstPris && !mienTennis && !pickleballPrisParAutre;
+    // Tennis réservé directement = tennis:false ET aucun pickleball n'est false
+    const tousPicklesLibresOuMiens = !slotData || !slotData.pickleball ||
+      ['P1','P2','P3','P4'].every(c =>
+        slotData.pickleball[c] === true ||
+        getMesResaId(dateStr, creneau, 'pickleball', c) !== null
+      );
+
+    const tennisReserveDirectement = tennisEstPris && tousPicklesLibresOuMiens && !mienTennis;
 
     // ===== COLONNE TENNIS =====
     let clsT, iconT, txtT, onclickT = '';
@@ -787,10 +793,12 @@ function renderGrid() {
       clsT = 'grid-slot slot-mien-tennis';
       iconT = '✓'; txtT = 'Réservé';
       onclickT = `cancelSlot('${mienTennis}','${creneau}','Tennis','tennis','tennis')`;
-    } else if (pickleballPrisParAutre) {
+    } else if (pickleReservePar3) {
+      // Un pickleball tiers est réservé → tennis bloqué
       clsT = 'grid-slot slot-bloque';
       iconT = '🔒'; txtT = 'Bloqué';
-    } else if (tennisEstPris) {
+    } else if (tennisReserveDirectement) {
+      // Tennis pris par quelqu'un d'autre directement
       clsT = 'grid-slot slot-pris';
       iconT = '✗'; txtT = 'Réservé';
     } else if (tennisEstLibre) {
@@ -815,15 +823,15 @@ function renderGrid() {
       let clsP, iconP, txtP, onclickP = '';
 
       if (mienPickle) {
-        // Ma réservation pickleball
+        // Ma réservation
         clsP = 'grid-slot slot-mien-pickle';
         iconP = '✓'; txtP = 'Réservé';
         onclickP = `cancelSlot('${mienPickle}','${creneau}','Pickleball ${court}','pickleball','${court}')`;
-      } else if (tennisReserveParAutre) {
-        // Tennis réservé par quelqu'un d'autre → ce pickleball bloqué
+      } else if (tennisReserveDirectement) {
+        // Tennis réservé par quelqu'un → pickleball bloqué
         clsP = 'grid-slot slot-bloque';
         iconP = '🔒'; txtP = 'Bloqué';
-      } else if (pickleEstPris) {
+      } else if (pickleEstPris && !mienPickle) {
         // Ce court pickleball pris par quelqu'un d'autre
         clsP = 'grid-slot slot-pris';
         iconP = '✗'; txtP = 'Réservé';
