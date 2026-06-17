@@ -432,26 +432,74 @@ async function api(action, params = {}) {
     const allParams = { action, token: state.token || '', ...params };
     const urlParams = new URLSearchParams(allParams);
     const targetUrl = API_URL + '?' + urlParams.toString();
-    
-    // Proxy CORS qui fonctionne sur tous les appareils
-    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl);
-    
-    const response = await fetch(proxyUrl, {
-      method: 'GET',
-      signal: AbortSignal.timeout(20000) // timeout 20 secondes
-    });
-    
-    if (!response.ok) throw new Error('Réponse réseau invalide');
-    
-    const wrapper = await response.json();
-    const data = JSON.parse(wrapper.contents);
-    return data;
-    
+
+    // Tentative 1 : fetch direct
+    try {
+      const response = await fetch(targetUrl, {
+        method: 'GET',
+        signal: AbortSignal.timeout(15000)
+      });
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      }
+    } catch(e1) {
+      console.log('Fetch direct échoué, tentative proxy...');
+    }
+
+    // Tentative 2 : proxy corsproxy.io
+    try {
+      const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
+      const response = await fetch(proxyUrl, { signal: AbortSignal.timeout(15000) });
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      }
+    } catch(e2) {
+      console.log('Proxy 1 échoué...');
+    }
+
+    // Tentative 3 : JSONP fallback
+    return await apiJsonp(action, params);
+
   } catch(e) {
-    console.error('API error:', e);
     return { success: false, message: 'Erreur réseau : ' + e.message };
   }
 }
+
+// JSONP fallback
+async function apiJsonp(action, params = {}) {
+  return new Promise((resolve) => {
+    const callbackName = 'cb_' + Math.random().toString(36).substr(2, 9);
+    const allParams = { action, token: state.token || '', callback: callbackName, ...params };
+    const urlParams = new URLSearchParams(allParams);
+
+    const timeout = setTimeout(() => {
+      resolve({ success: false, message: 'Délai dépassé' });
+      delete window[callbackName];
+      document.getElementById(callbackName)?.remove();
+    }, 15000);
+
+    window[callbackName] = function(data) {
+      clearTimeout(timeout);
+      resolve(data);
+      delete window[callbackName];
+      document.getElementById(callbackName)?.remove();
+    };
+
+    const script = document.createElement('script');
+    script.id = callbackName;
+    script.src = API_URL + '?' + urlParams.toString();
+    script.onerror = function() {
+      clearTimeout(timeout);
+      resolve({ success: false, message: 'Erreur réseau' });
+      delete window[callbackName];
+      script.remove();
+    };
+    document.body.appendChild(script);
+  });
+}
+
 
 // ============================================================
 // TOAST
