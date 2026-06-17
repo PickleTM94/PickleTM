@@ -131,7 +131,7 @@
   .resa-grid { display: grid; grid-template-columns: 70px repeat(5, 1fr); min-width: 600px; }
 
   .grid-court-header { padding: 14px 10px; text-align: center; border-bottom: 1px solid var(--glass-border); font-size: 13px; font-weight: 700; }
-  .grid-court-header.tennis-header { background: rgba(212,175,55,0.12); border-right: 1px solid rgba(212,175,55,0.2); color: var(--gold); }
+  .grid-court-header.tennis-header { background:#E8C7B0; border-right:2px solid #C97F57; color:#8B4E2E; }
   .grid-court-header.pickle-header { background: rgba(52,211,153,0.08); border-right: 1px solid rgba(52,211,153,0.1); color: var(--emerald-bright); }
   .grid-court-header.pickle-header:last-child { border-right: none; }
   .grid-court-header.time-header { background: transparent; border-right: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
@@ -143,10 +143,10 @@
   .grid-slot { min-height: 58px; display: flex; align-items: center; justify-content: center; border-right: 1px solid rgba(240,253,244,0.05); border-bottom: 1px solid rgba(240,253,244,0.04); transition: all 0.18s; padding: 6px; }
   .grid-slot:last-child { border-right: none; }
 
-  .slot-libre-tennis { background: rgba(212,175,55,0.07); cursor: pointer; }
-  .slot-libre-tennis:hover { background: rgba(212,175,55,0.22); box-shadow: inset 0 0 0 2px rgba(212,175,55,0.6); }
-  .slot-libre-tennis .slot-inner { color: rgba(212,175,55,0.65); }
-  .slot-libre-tennis:hover .slot-inner { color: var(--gold); }
+  .slot-libre-tennis { background:#F3E4D8; cursor:pointer; }
+  .slot-libre-tennis:hover { background:#EFD7C8; box-shadow: inset 0 0 0 2px #C97F57; }
+  .slot-libre-tennis .slot-inner { color:#A66A45; }
+  .slot-libre-tennis:hover .slot-inner { color:#8B4E2E; }
 
   .slot-libre-pickle { background: rgba(52,211,153,0.06); cursor: pointer; }
   .slot-libre-pickle:hover { background: rgba(52,211,153,0.2); box-shadow: inset 0 0 0 2px rgba(52,211,153,0.5); }
@@ -159,8 +159,8 @@
   .slot-bloque { background: rgba(248,113,113,0.07); cursor: not-allowed; }
   .slot-bloque .slot-inner { color: rgba(248,113,113,0.45); }
 
-  .slot-mien-tennis { background: rgba(212,175,55,0.18); box-shadow: inset 0 0 0 2px var(--gold); cursor: pointer; }
-  .slot-mien-tennis .slot-inner { color: var(--gold); font-weight: 700; }
+  .slot-mien-tennis { background:#E8C7B0; box-shadow: inset 0 0 0 2px #C97F57; cursor:pointer; }
+  .slot-mien-tennis .slot-inner { color:#8B4E2E; font-weight:700; }
   .slot-mien-tennis:hover { background: rgba(248,113,113,0.18); box-shadow: inset 0 0 0 2px var(--danger); }
   .slot-mien-tennis:hover .slot-inner { color: var(--danger); }
 
@@ -785,7 +785,7 @@ function renderGrid() {
     } else {
       // Libre
       clsT = 'grid-slot slot-libre-tennis';
-      iconT = '🎾'; txtT = 'Libre';
+      iconT = ''; txtT = 'Libre';
       onclickT = `bookSlot('${dateStr}','${creneau}','tennis','tennis')`;
     }
     html += `<div class="${clsT}" ${onclickT?`onclick="${onclickT}"`:''}><div class="slot-inner"><span class="slot-icon-sm">${iconT}</span><span class="slot-text">${txtT}</span></div></div>`;
@@ -815,7 +815,7 @@ function renderGrid() {
       } else if (estLibre) {
         // Libre
         clsP = 'grid-slot slot-libre-pickle';
-        iconP = '🏓'; txtP = 'Libre';
+        iconP = ''; txtP = 'Libre';
         onclickP = `bookSlot('${dateStr}','${creneau}','pickleball','${court}')`;
       } else {
         clsP = 'grid-slot slot-pris';
