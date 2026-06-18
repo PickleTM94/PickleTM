@@ -224,11 +224,78 @@
   .empty-state .icon { font-size: 44px; margin-bottom: 14px; }
   .empty-state h3 { font-size: 17px; color: var(--white-dim); margin-bottom: 6px; }
 
+  /* ===== RESPONSIVE ===== */
   @media (max-width: 768px) {
-    header { padding: 14px 16px; }
-    .app-body { padding: 16px; }
+
+    /* Header compact */
+    header { padding: 10px 14px; }
+    .logo-sub { display: none; }
+    .logo-name { font-size: 17px; }
+    .logo-icon { width: 36px; height: 36px; font-size: 17px; }
+    .user-name { font-size: 13px; }
+    .user-role { display: none; }
+    .btn-ghost.btn-sm { padding: 5px 10px; font-size: 12px; }
+
+    /* App body */
+    .app-body { padding: 12px 14px; }
+
+    /* Nav tabs — scrollable horizontal */
+    .nav-tabs { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; margin-bottom: 16px; }
+    .nav-tab { padding: 8px 14px; font-size: 12px; white-space: nowrap; flex-shrink: 0; }
+
+    /* Auth */
+    .auth-card { padding: 24px 18px; }
     .form-row { grid-template-columns: 1fr; }
-    .auth-card { padding: 28px 20px; }
+    #page-auth { padding: 20px 14px; }
+
+    /* section-sub */
+    .section-sub { font-size: 12px; margin-bottom: 14px; }
+
+    /* Quota bar */
+    .quota-bar { padding: 8px 12px; gap: 8px; }
+    .quota-label { font-size: 11px; }
+
+    /* DATE NAV — tout sur une ligne compacte */
+    .calendar-controls { gap: 8px; flex-wrap: nowrap; align-items: center; }
+    .date-nav { padding: 6px 10px; gap: 6px; flex: 1; min-width: 0; }
+    .date-nav span { font-size: 12px; font-weight: 600; min-width: 0; flex: 1; }
+    .date-nav button { font-size: 16px; padding: 0; flex-shrink: 0; }
+    .btn-today { padding: 6px 12px; font-size: 12px; white-space: nowrap; flex-shrink: 0; }
+
+    /* GRID planning — colonne heure réduite, cellules compactes */
+    .resa-grid { grid-template-columns: 46px repeat(5, 1fr); min-width: 0; width: 100%; }
+    .grid-court-header { padding: 8px 2px; font-size: 10px; }
+    .court-icon { font-size: 14px; margin-bottom: 2px; }
+    .court-name { font-size: 9px; letter-spacing: 0; }
+    .grid-time { font-size: 10px; min-height: 48px; padding: 0 4px; }
+    .grid-slot { min-height: 48px; padding: 3px 2px; }
+    .slot-icon-sm { font-size: 13px; }
+    .slot-text { font-size: 9px; }
+    .slot-inner { padding: 3px 2px; gap: 1px; }
+
+    /* Mes réservations — 1 colonne */
+    .resas-grid { grid-template-columns: 1fr; }
+
+    /* Admin table — scrollable */
+    .members-table th, .members-table td { padding: 10px 10px; font-size: 12px; }
+    .actions-cell { gap: 4px; }
+    .btn-sm { padding: 5px 8px; font-size: 11px; }
+
+    /* Modal */
+    .modal { padding: 24px 18px; margin: 14px; }
+    .modal h3 { font-size: 17px; }
+
+    /* Toast */
+    #toast { bottom: 16px; right: 14px; left: 14px; }
+    .toast-item { max-width: 100%; }
+  }
+
+  @media (max-width: 400px) {
+    .date-nav span { font-size: 11px; }
+    .resa-grid { grid-template-columns: 40px repeat(5, 1fr); }
+    .grid-time { font-size: 9px; padding: 0 2px; }
+    .court-name { display: none; }
+    .court-icon { margin-bottom: 0; }
   }
 
 body{background:linear-gradient(180deg,#f8fafc,#eef5fb)!important;color:#0f172a!important;}
