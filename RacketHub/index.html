@@ -698,6 +698,17 @@ function changeAdminDate(delta) {
 }
 
 // ============================================================
+// VÉRIFIER SESSION DANS CHAQUE RÉPONSE API
+// ============================================================
+function checkSession(res) {
+  if (res && res.success === false && res.message && res.message.includes('Session expirée')) {
+    handleSessionExpiree();
+    return false;
+  }
+  return true;
+}
+
+// ============================================================
 // LOAD SLOTS
 // ============================================================
 async function loadSlots() {
@@ -709,6 +720,8 @@ async function loadSlots() {
     api('getCreneauxDisponibles', { date: dateStr }),
     api('getMesReservations')
   ]);
+
+  if (!checkSession(resSlots) || !checkSession(resMes)) return;
 
   // Normaliser slotsData
   if (resSlots && resSlots.data && resSlots.data['09:00'] !== undefined) {
@@ -855,6 +868,7 @@ function bookSlot(date, creneau, sport, court) {
       showLoading('Réservation en cours...');
       const res = await api('creerReservation', { date, creneau, sport, court });
       hideLoading();
+      if (!checkSession(res)) return;
       if (res && res.success) { toast('Réservation confirmée ! 🎾', 'success'); loadSlots(); }
       else toast(res?.message || 'Erreur lors de la réservation', 'error');
     }
@@ -870,6 +884,7 @@ function cancelSlot(resaId, creneau, courtLabel, sport, court) {
       showLoading('Annulation en cours...');
       const res = await api('annulerReservation', { reservationId: resaId });
       hideLoading();
+      if (!checkSession(res)) return;
       if (res && res.success) {
         toast('Réservation annulée', 'info');
         loadSlots();
@@ -904,7 +919,7 @@ function renderQuota() {
 async function loadMesResas() {
   document.getElementById('mes-resas-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   const res = await api('getMesReservations');
-  if (res && res.data && Array.isArray(res.data)) state.mesResas = res.data;
+  if (!checkSession(res)) return;
   else if (Array.isArray(res)) state.mesResas = res;
   else state.mesResas = [];
   renderMesResas();
@@ -1030,10 +1045,32 @@ async function adminDeleteResa(resaId) {
 }
 
 // ============================================================
+// SESSION EXPIRÉE — déconnexion automatique
+// ============================================================
+function handleSessionExpiree() {
+  state.token = null; state.membre = null;
+  localStorage.removeItem('token'); localStorage.removeItem('membre');
+  showPage('page-auth');
+  toast('Session expirée, veuillez vous reconnecter.', 'error');
+}
+
+// Vérifier le token au chargement
+async function verifierSession() {
+  if (!state.token) return;
+  const res = await api('getMesReservations');
+  if (res && res.message && res.message.includes('Session expirée')) {
+    handleSessionExpiree();
+  }
+}
+
+// ============================================================
 // BOOT
 // ============================================================
 window.addEventListener('DOMContentLoaded', () => {
-  if (state.token && state.membre) enterApp();
+  if (state.token && state.membre) {
+    enterApp();
+    verifierSession();
+  }
 });
 </script>
 </body>
