@@ -989,9 +989,25 @@ function renderQuota() {
 async function loadMesResas() {
   document.getElementById('mes-resas-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   const res = await api('getMesReservations');
-  if (!checkSession(res)) return;
-  else if (Array.isArray(res)) state.mesResas = res;
-  else state.mesResas = [];
+  
+  console.log('getMesReservations res:', JSON.stringify(res));
+
+  // Ne pas bloquer sur checkSession pour cette fonction
+  if (res && res.message && res.message.includes('Session expirée')) {
+    handleSessionExpiree();
+    return;
+  }
+
+  if (res && res.data && Array.isArray(res.data)) {
+    state.mesResas = res.data;
+  } else if (res && res.success && Array.isArray(res.data)) {
+    state.mesResas = res.data;
+  } else if (Array.isArray(res)) {
+    state.mesResas = res;
+  } else {
+    state.mesResas = [];
+  }
+
   renderMesResas();
   renderQuota();
 }
