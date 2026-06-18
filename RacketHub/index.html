@@ -294,7 +294,10 @@
     .date-nav span { font-size: 11px; }
     .resa-grid { grid-template-columns: 40px repeat(5, 1fr); }
     .grid-time { font-size: 9px; padding: 0 2px; }
-    .court-name { display: none; }
+    .court-name { font-size: 9px; letter-spacing: 0; }
+    .court-icon { display: none; }
+    .court-name-short { display: inline !important; }
+    .court-name-full { display: none !important; }
     .court-icon { margin-bottom: 0; }
   }
 
@@ -839,9 +842,9 @@ function renderGrid() {
 
   // En-têtes
   html += `<div class="grid-court-header time-header"></div>`;
-  html += `<div class="grid-court-header tennis-header"><span class="court-icon">🎾</span><span class="court-name">Tennis</span></div>`;
+  html += `<div class="grid-court-header tennis-header"><span class="court-icon">🎾</span><span class="court-name court-name-full">Tennis</span><span class="court-name-short" style="display:none;font-size:10px;font-weight:700;color:#8B4E2E">TN</span></div>`;
   ['P1','P2','P3','P4'].forEach((p, i) => {
-    html += `<div class="grid-court-header pickle-header"><span class="court-icon">🏓</span><span class="court-name">Pickleball ${i+1}</span></div>`;
+    html += `<div class="grid-court-header pickle-header"><span class="court-icon">🏓</span><span class="court-name court-name-full">Pickleball ${i+1}</span><span class="court-name-short" style="display:none;font-size:10px;font-weight:700;color:var(--emerald-bright)">${p}</span></div>`;
   });
 
   CRENEAUX.forEach(creneau => {
@@ -983,38 +986,12 @@ function renderQuota() {
 // ============================================================
 // MES RÉSERVATIONS
 // ============================================================
-<!-- async function loadMesResas() { -->
-  <!-- document.getElementById('mes-resas-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>'; -->
-  <!-- const res = await api('getMesReservations'); -->
-  <!-- if (!checkSession(res)) return; -->
-  <!-- if (res && res.data && Array.isArray(res.data)) state.mesResas = res.data; -->
-  <!-- else if (Array.isArray(res)) state.mesResas = res; -->
-  <!-- else state.mesResas = []; -->
-  <!-- renderMesResas(); -->
-  <!-- renderQuota(); -->
-<!-- } -->
 async function loadMesResas() {
   document.getElementById('mes-resas-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   const res = await api('getMesReservations');
-  
-  console.log('getMesReservations res:', JSON.stringify(res));
-
-  // Ne pas bloquer sur checkSession pour cette fonction
-  if (res && res.message && res.message.includes('Session expirée')) {
-    handleSessionExpiree();
-    return;
-  }
-
-  if (res && res.data && Array.isArray(res.data)) {
-    state.mesResas = res.data;
-  } else if (res && res.success && Array.isArray(res.data)) {
-    state.mesResas = res.data;
-  } else if (Array.isArray(res)) {
-    state.mesResas = res;
-  } else {
-    state.mesResas = [];
-  }
-
+  if (!checkSession(res)) return;
+  else if (Array.isArray(res)) state.mesResas = res;
+  else state.mesResas = [];
   renderMesResas();
   renderQuota();
 }
