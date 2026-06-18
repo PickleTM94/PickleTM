@@ -101,7 +101,6 @@
   .nav-tab.active { background: linear-gradient(135deg, var(--emerald), #059669); color: white; box-shadow: 0 2px 10px rgba(16,185,129,0.3); }
   .nav-tab:hover:not(.active) { color: var(--white); background: var(--white-faint); }
 
-  .section-title { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 4px; background: linear-gradient(135deg, var(--white), var(--emerald-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .section-sub { color: var(--text-muted); font-size: 13px; margin-bottom: 24px; }
 
   /* QUOTA */
@@ -150,7 +149,7 @@
 
   .slot-libre-pickle { background: rgba(52,211,153,0.06); cursor: pointer; }
   .slot-libre-pickle:hover { background: rgba(52,211,153,0.2); box-shadow: inset 0 0 0 2px rgba(52,211,153,0.5); }
-  .slot-libre-pickle .slot-inner { color: rgba(52,211,153,0.55); }
+  .slot-libre-pickle .slot-inner { color: rgba(52,211,153,0.9); }
   .slot-libre-pickle:hover .slot-inner { color: var(--emerald-bright); }
 
   .slot-pris { background: rgba(240,253,244,0.02); cursor: not-allowed; }
@@ -254,12 +253,7 @@ box-shadow:0 4px 20px rgba(15,23,42,.05)!important;
 .nav-tab.active{
 border-radius:12px!important;
 }
-.section-title{
-color:#0f172a!important;
-background:none!important;
--webkit-text-fill-color:initial!important;
-font-size:32px!important;
-}
+
 .grid-container,.table-wrapper{
 background:#fff!important;
 border-radius:24px!important;
@@ -354,7 +348,6 @@ border-radius:12px!important;
 
       <!-- RÉSERVER -->
       <div id="section-reserver">
-        <div class="section-title">Réserver un court</div>
         <div class="section-sub">1 terrain tennis · 4 terrains pickleball · Créneaux 1h de 9h à 20h</div>
         <div class="quota-bar">
           <span class="quota-label">Réservations cette semaine</span>
@@ -381,14 +374,12 @@ border-radius:12px!important;
 
       <!-- MES RÉSERVATIONS -->
       <div id="section-mes-resas" style="display:none">
-        <div class="section-title">Mes réservations</div>
         <div class="section-sub">Vos créneaux à venir — annulation possible jusqu'à 3h avant</div>
         <div id="mes-resas-content"><div class="loading"><div class="spinner"></div></div></div>
       </div>
 
       <!-- ADMIN -->
       <div id="section-admin" style="display:none">
-        <div class="section-title">Administration</div>
         <div class="section-sub">Gestion des membres et des réservations</div>
         <div class="nav-tabs" style="margin-bottom:20px">
           <button class="nav-tab active" onclick="showAdminTab('membres')" id="atab-membres">👥 Membres</button>
@@ -410,6 +401,12 @@ border-radius:12px!important;
       </div>
     </div>
   </div>
+</div>
+
+<!-- LOADING OVERLAY -->
+<div id="loading-overlay" style="display:none;position:fixed;inset:0;background:rgba(255,255,255,0.75);backdrop-filter:blur(4px);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+  <div style="width:44px;height:44px;border:4px solid rgba(16,185,129,0.2);border-top-color:#10b981;border-radius:50%;animation:spin 0.8s linear infinite"></div>
+  <div id="loading-msg" style="color:#059669;font-size:14px;font-weight:600;font-family:Inter,sans-serif;letter-spacing:0.3px">Chargement...</div>
 </div>
 
 <!-- MODAL -->
@@ -552,6 +549,17 @@ async function apiJsonp(action, params = {}) {
 
 
 // ============================================================
+// LOADING OVERLAY
+// ============================================================
+function showLoading(msg = 'Chargement...') {
+  document.getElementById('loading-msg').textContent = msg;
+  document.getElementById('loading-overlay').style.display = 'flex';
+}
+function hideLoading() {
+  document.getElementById('loading-overlay').style.display = 'none';
+}
+
+// ============================================================
 // TOAST
 // ============================================================
 function toast(msg, type = 'info') {
@@ -594,7 +602,9 @@ async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value;
   if (!email || !password) { toast('Remplissez tous les champs', 'error'); return; }
+  showLoading('Connexion en cours...');
   const res = await api('login', { email, password });
+  hideLoading();
   if (res && res.success && res.token) {
     state.token = res.token;
     state.membre = res.membre;
@@ -804,14 +814,16 @@ function renderGrid() {
         clsP = 'grid-slot slot-mien-pickle';
         iconP = '✓'; txtP = 'Réservé';
         onclickP = `cancelSlot('${mienPickle}','${creneau}','Pickleball ${court}','pickleball','${court}')`;
-      } else if (vraiTennisPris) {
+      } else if (vraiTennisPris||mienTennis) {
         // Tennis réservé → tous pickles bloqués
         clsP = 'grid-slot slot-bloque';
         iconP = '🔒'; txtP = 'Bloqué';
       } else if (estPris) {
         // Ce court pris par quelqu'un d'autre
-        clsP = 'grid-slot slot-pris';
-        iconP = '✗'; txtP = 'Réservé';
+        <!-- clsP = 'grid-slot slot-pris'; -->
+        <!-- iconP = '✗'; txtP = 'Réservé'; -->
+        clsP = 'grid-slot slot-bloque';
+        iconP = '🔒'; txtP = 'Bloqué';
       } else if (estLibre) {
         // Libre
         clsP = 'grid-slot slot-libre-pickle';
@@ -840,7 +852,9 @@ function bookSlot(date, creneau, sport, court) {
     'Confirmer la réservation', 'Voulez-vous réserver ce créneau ?',
     `${courtLabel} · ${creneau}–${hFin} · ${dateLabel}`, 'Réserver',
     async () => {
+      showLoading('Réservation en cours...');
       const res = await api('creerReservation', { date, creneau, sport, court });
+      hideLoading();
       if (res && res.success) { toast('Réservation confirmée ! 🎾', 'success'); loadSlots(); }
       else toast(res?.message || 'Erreur lors de la réservation', 'error');
     }
@@ -853,7 +867,9 @@ function cancelSlot(resaId, creneau, courtLabel, sport, court) {
     'Annuler la réservation', 'Voulez-vous annuler ce créneau ?',
     `${courtLabel} · ${creneau}–${hFin}`, 'Annuler la réservation',
     async () => {
+      showLoading('Annulation en cours...');
       const res = await api('annulerReservation', { reservationId: resaId });
+      hideLoading();
       if (res && res.success) {
         toast('Réservation annulée', 'info');
         loadSlots();
