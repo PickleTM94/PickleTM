@@ -987,6 +987,7 @@ async function loadMesResas() {
   document.getElementById('mes-resas-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   const res = await api('getMesReservations');
   if (!checkSession(res)) return;
+  if (res && res.data && Array.isArray(res.data)) state.mesResas = res.data;
   else if (Array.isArray(res)) state.mesResas = res;
   else state.mesResas = [];
   renderMesResas();
