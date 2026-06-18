@@ -511,38 +511,6 @@ let state = {
 // ============================================================
 // JSONP API
 // ============================================================
-<!-- async function api(action, params = {}) { -->
-  <!-- return new Promise((resolve) => { -->
-    <!-- const callbackName = 'cb_' + Math.random().toString(36).substr(2, 9); -->
-    <!-- const allParams = { action, token: state.token || '', callback: callbackName, ...params }; -->
-    <!-- const urlParams = new URLSearchParams(allParams); -->
-
-    <!-- // Timeout de 15 secondes -->
-    <!-- const timeout = setTimeout(() => { -->
-      <!-- resolve({ success: false, message: 'Délai dépassé — vérifiez votre connexion' }); -->
-      <!-- delete window[callbackName]; -->
-      <!-- document.getElementById(callbackName)?.remove(); -->
-    <!-- }, 15000); -->
-
-    <!-- window[callbackName] = function(data) { -->
-      <!-- clearTimeout(timeout); -->
-      <!-- resolve(data); -->
-      <!-- delete window[callbackName]; -->
-      <!-- document.getElementById(callbackName)?.remove(); -->
-    <!-- }; -->
-
-    <!-- const script = document.createElement('script'); -->
-    <!-- script.id = callbackName; -->
-    <!-- script.src = API_URL + '?' + urlParams.toString(); -->
-    <!-- script.onerror = function() { -->
-      <!-- clearTimeout(timeout); -->
-      <!-- resolve({ success: false, message: 'Erreur réseau — vérifiez votre connexion' }); -->
-      <!-- delete window[callbackName]; -->
-      <!-- script.remove(); -->
-    <!-- }; -->
-    <!-- document.body.appendChild(script); -->
-  <!-- }); -->
-<!-- } -->
 
 async function api(action, params = {}) {
   try {
@@ -903,8 +871,8 @@ function renderGrid() {
         iconP = '🔒'; txtP = 'Bloqué';
       } else if (estPris) {
         // Ce court pris par quelqu'un d'autre
-        <!-- clsP = 'grid-slot slot-pris'; -->
-        <!-- iconP = '✗'; txtP = 'Réservé'; -->
+        //clsP = 'grid-slot slot-pris';
+        //iconP = '✗'; txtP = 'Réservé';
         clsP = 'grid-slot slot-bloque';
         iconP = '🔒'; txtP = 'Bloqué';
       } else if (estLibre) {
