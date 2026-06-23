@@ -452,13 +452,32 @@ border-radius:12px!important;
           <div class="quota-dots" id="quota-dots"></div>
           <span class="quota-text" id="quota-text">0 / 3</span>
         </div>
-        <div class="calendar-controls">
+        <div class="calendar-controls" style="position:relative">
           <div class="date-nav">
             <button onclick="changeDate(-1)">‹</button>
-            <span id="current-date-label">—</span>
+            <span id="current-date-label" onclick="toggleCalendar()" style="cursor:pointer;user-select:none;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(110,231,183,0.4)" title="Cliquer pour choisir une date">—</span>
             <button onclick="changeDate(1)">›</button>
           </div>
           <button class="btn-today" onclick="goToday()">Aujourd'hui</button>
+
+          <!-- CALENDRIER POPUP fond clair -->
+          <div id="date-picker-popup" style="display:none;position:absolute;top:calc(100% + 8px);left:0;z-index:300;background:#ffffff;border:1px solid #d1fae5;border-radius:16px;padding:16px;box-shadow:0 8px 32px rgba(0,0,0,0.15);width:280px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <button onclick="prevCalMonth()" style="background:none;border:none;color:#059669;cursor:pointer;font-size:20px;padding:4px 8px;border-radius:8px;line-height:1">‹</button>
+              <span id="cal-month-label" style="font-size:14px;font-weight:700;color:#1e3a5f;font-family:Inter,sans-serif"></span>
+              <button onclick="nextCalMonth()" style="background:none;border:none;color:#059669;cursor:pointer;font-size:20px;padding:4px 8px;border-radius:8px;line-height:1">›</button>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:6px">
+              <div style="text-align:center;font-size:10px;font-weight:700;color:#94a3b8;padding:4px 0;font-family:Inter,sans-serif">Lu</div>
+              <div style="text-align:center;font-size:10px;font-weight:700;color:#94a3b8;padding:4px 0;font-family:Inter,sans-serif">Ma</div>
+              <div style="text-align:center;font-size:10px;font-weight:700;color:#94a3b8;padding:4px 0;font-family:Inter,sans-serif">Me</div>
+              <div style="text-align:center;font-size:10px;font-weight:700;color:#94a3b8;padding:4px 0;font-family:Inter,sans-serif">Je</div>
+              <div style="text-align:center;font-size:10px;font-weight:700;color:#94a3b8;padding:4px 0;font-family:Inter,sans-serif">Ve</div>
+              <div style="text-align:center;font-size:10px;font-weight:700;color:#94a3b8;padding:4px 0;font-family:Inter,sans-serif">Sa</div>
+              <div style="text-align:center;font-size:10px;font-weight:700;color:#94a3b8;padding:4px 0;font-family:Inter,sans-serif">Di</div>
+            </div>
+            <div id="cal-days" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"></div>
+          </div>
         </div>
 
         <div class="grid-container">
@@ -487,13 +506,7 @@ border-radius:12px!important;
         <div id="admin-membres"><div id="membres-content"><div class="loading"><div class="spinner"></div></div></div></div>
         <div id="admin-attente" style="display:none"><div id="attente-content"><div class="loading"><div class="spinner"></div></div></div></div>
         <div id="admin-reservations" style="display:none">
-          <div class="calendar-controls" style="margin-bottom:16px">
-            <div class="date-nav">
-              <button onclick="changeAdminDate(-1)">‹</button>
-              <span id="admin-date-label">—</span>
-              <button onclick="changeAdminDate(1)">›</button>
-            </div>
-          </div>
+          <div class="section-sub" style="margin-bottom:16px">Réservations de la semaine en cours (aujourd'hui + 7 jours)</div>
           <div id="admin-resas-content"><div class="loading"><div class="spinner"></div></div></div>
         </div>
       </div>
@@ -786,7 +799,12 @@ function showSection(name) {
 // ============================================================
 // DATE
 // ============================================================
-function formatDate(d) { return d.toISOString().split('T')[0]; }
+function formatDate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const j = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${j}`;
+}
 function formatDateFRShort(d) { return d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' }); }
 
 function changeDate(delta) {
@@ -799,11 +817,7 @@ function changeDate(delta) {
   loadSlots();
 }
 function goToday() { state.currentDate = new Date(); loadSlots(); }
-function changeAdminDate(delta) {
-  state.adminDate.setDate(state.adminDate.getDate() + delta);
-  document.getElementById('admin-date-label').textContent = formatDateFRShort(state.adminDate);
-  loadAdminResas();
-}
+
 
 // ============================================================
 // VÉRIFIER SESSION DANS CHAQUE RÉPONSE API
@@ -814,6 +828,94 @@ function checkSession(res) {
     return false;
   }
   return true;
+}
+
+// ============================================================
+// LOAD SLOTS
+// ============================================================
+// ============================================================
+// CALENDRIER POPUP
+// ============================================================
+let calMonth = new Date();
+
+function toggleCalendar() {
+  const popup = document.getElementById('date-picker-popup');
+  if (popup.style.display === 'none') {
+    calMonth = new Date(state.currentDate.getFullYear(), state.currentDate.getMonth(), 1);
+    renderCalendar();
+    popup.style.display = 'block';
+    setTimeout(() => document.addEventListener('click', closeCalendarOutside), 0);
+  } else {
+    popup.style.display = 'none';
+    document.removeEventListener('click', closeCalendarOutside);
+  }
+}
+
+function closeCalendarOutside(e) {
+  const popup = document.getElementById('date-picker-popup');
+  const label = document.getElementById('current-date-label');
+  if (!popup.contains(e.target) && e.target !== label) {
+    popup.style.display = 'none';
+    document.removeEventListener('click', closeCalendarOutside);
+  }
+}
+
+function prevCalMonth() {
+  calMonth.setMonth(calMonth.getMonth() - 1);
+  renderCalendar();
+}
+
+function nextCalMonth() {
+  calMonth.setMonth(calMonth.getMonth() + 1);
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const maxDate = new Date(today); maxDate.setDate(maxDate.getDate() + 7);
+  const selectedStr = formatDate(state.currentDate);
+  const todayStr = formatDate(today);
+
+  document.getElementById('cal-month-label').textContent =
+    calMonth.toLocaleDateString('fr-FR', { month:'long', year:'numeric' });
+
+  const lastDay = new Date(calMonth.getFullYear(), calMonth.getMonth() + 1, 0);
+  let startDow = new Date(calMonth.getFullYear(), calMonth.getMonth(), 1).getDay() - 1;
+  if (startDow < 0) startDow = 6;
+
+  let html = '';
+  for (let i = 0; i < startDow; i++) html += '<div></div>';
+
+  for (let d = 1; d <= lastDay.getDate(); d++) {
+    const date = new Date(calMonth.getFullYear(), calMonth.getMonth(), d);
+    date.setHours(0,0,0,0);
+    const dateStr = formatDate(date);
+    const isSelected = dateStr === selectedStr;
+    const isToday    = dateStr === todayStr;
+    const disabled   = date < today || date > maxDate;
+
+    let bg, color, border, fw, cursor;
+    if (isSelected)      { bg='#059669'; color='#ffffff'; border='none'; fw='700'; cursor='pointer'; }
+    else if (isToday)    { bg='#d1fae5'; color='#065f46'; border='2px solid #10b981'; fw='700'; cursor='pointer'; }
+    else if (disabled)   { bg='transparent'; color='#cbd5e1'; border='none'; fw='400'; cursor='not-allowed'; }
+    else                 { bg='transparent'; color='#1e293b'; border='none'; fw='400'; cursor='pointer'; }
+
+    html += `<div
+      onclick="${disabled ? '' : `selectCalDate('${dateStr}')`}"
+      onmouseover="${disabled ? '' : `if('${isSelected}'!=='true')this.style.background='#f0fdf4'`}"
+      onmouseout="${disabled ? '' : `if('${isSelected}'!=='true')this.style.background='${isSelected?'#059669':'transparent'}'`}"
+      style="text-align:center;padding:7px 2px;border-radius:8px;font-size:12px;font-weight:${fw};color:${color};background:${bg};border:${border};cursor:${cursor};font-family:Inter,sans-serif;transition:background 0.15s"
+    >${d}</div>`;
+  }
+
+  document.getElementById('cal-days').innerHTML = html;
+}
+
+function selectCalDate(dateStr) {
+  state.currentDate = new Date(dateStr + 'T12:00:00');
+  document.getElementById('date-picker-popup').style.display = 'none';
+  document.removeEventListener('click', closeCalendarOutside);
+  loadSlots();
 }
 
 // ============================================================
@@ -1085,7 +1187,7 @@ function showAdminTab(tab) {
   });
   if (tab === 'membres') loadAdminMembres();
   if (tab === 'attente') loadAdminAttente();
-  if (tab === 'reservations') { document.getElementById('admin-date-label').textContent = formatDateFRShort(state.adminDate); loadAdminResas(); }
+  if (tab === 'reservations') { loadAdminResas(); }
 }
 
 async function loadAdminMembres() {
@@ -1127,19 +1229,46 @@ async function loadAdminAttente() {
 
 async function loadAdminResas() {
   document.getElementById('admin-resas-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-  const res = await api('getToutesReservations', { date: formatDate(state.adminDate) });
+  const res = await api('getToutesReservations');
   const resas = (res && res.data && Array.isArray(res.data)) ? res.data : (Array.isArray(res) ? res : []);
-  if (!resas.length) { document.getElementById('admin-resas-content').innerHTML = '<div class="empty-state"><div class="icon">📋</div><h3>Aucune réservation ce jour</h3></div>'; return; }
-  document.getElementById('admin-resas-content').innerHTML = `<div class="table-wrapper"><table class="members-table">
-    <thead><tr><th>Membre</th><th>Créneau</th><th>Sport</th><th>Court</th><th>Action</th></tr></thead>
-    <tbody>${resas.map(r => `<tr>
-      <td style="font-weight:600">${r.membreNom}</td>
-      <td>${r.creneau}</td>
-      <td>${r.sport === 'tennis' ? '🎾 Tennis' : '🏓 Pickleball'}</td>
-      <td>${r.court}</td>
-      <td><button class="btn btn-danger btn-sm" onclick="adminDeleteResa('${r.id}')">Supprimer</button></td>
-    </tr>`).join('')}</tbody>
-  </table></div>`;
+  if (!resas.length) {
+    document.getElementById('admin-resas-content').innerHTML = '<div class="empty-state"><div class="icon">📋</div><h3>Aucune réservation cette semaine</h3></div>';
+    return;
+  }
+
+  // Grouper par date
+  const parDate = {};
+  resas.forEach(r => {
+    if (!parDate[r.date]) parDate[r.date] = [];
+    parDate[r.date].push(r);
+  });
+
+  let html = '';
+  Object.keys(parDate).sort().forEach(date => {
+    const dateLabel = new Date(date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
+    const isToday = date === formatDate(new Date());
+    html += `<div style="margin-bottom:20px">
+      <div style="font-size:13px;font-weight:700;color:var(--emerald-bright);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding:6px 12px;background:rgba(16,185,129,0.1);border-radius:8px;border-left:3px solid var(--emerald);display:inline-block">
+        ${dateLabel}${isToday ? ' — Aujourd\'hui' : ''}
+      </div>
+      <div class="table-wrapper">
+        <table class="members-table">
+          <thead><tr><th>Membre</th><th>Créneau</th><th>Sport</th><th>Court</th><th>Action</th></tr></thead>
+          <tbody>
+            ${parDate[date].map(r => `<tr>
+              <td style="font-weight:600">${r.membreNom}</td>
+              <td>${r.creneau}</td>
+              <td>${r.sport === 'tennis' ? '🎾 Tennis' : '🏓 Pickleball'}</td>
+              <td>${r.court}</td>
+              <td><button class="btn btn-danger btn-sm" onclick="adminDeleteResa('${r.id}')">Supprimer</button></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('admin-resas-content').innerHTML = html;
 }
 
 function badgeStatut(s) {
