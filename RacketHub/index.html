@@ -137,9 +137,9 @@
   .court-icon { font-size: 20px; display: block; margin-bottom: 4px; }
   .court-name { font-size: 12px; letter-spacing: 0.5px; }
 
-  .grid-time { padding: 0 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--text-muted); border-right: 1px solid var(--glass-border); border-bottom: 1px solid rgba(240,253,244,0.04); min-height: 58px; }
+  .grid-time { padding: 0 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--text-muted); border-right: 1px solid var(--glass-border); border-bottom: 1px solid rgba(181,181,181,0.20); min-height: 58px; }
 
-  .grid-slot { min-height: 58px; display: flex; align-items: center; justify-content: center; border-right: 1px solid rgba(240,253,244,0.05); border-bottom: 1px solid rgba(240,253,244,0.04); transition: all 0.18s; padding: 6px; }
+  .grid-slot { min-height: 58px; display: flex; align-items: center; justify-content: center; border-right: 1px solid rgba(240,253,244,0.05); border-bottom: 1px solid rgba(181,181,181,0.20); transition: all 0.18s; padding: 6px; }
   .grid-slot:last-child { border-right: none; }
 
   .slot-libre-tennis { background:#F3E4D8; cursor:pointer; }
@@ -235,6 +235,10 @@
     .user-name { font-size: 13px; }
     .user-role { display: none; }
     .btn-ghost.btn-sm { padding: 5px 10px; font-size: 12px; }
+
+
+	.tab-label-full { display: none; }
+	.tab-label-short { display: inline !important; }
 
     /* App body */
     .app-body { padding: 12px 14px; }
@@ -441,7 +445,7 @@ border-radius:12px!important;
       <div class="nav-tabs">
         <button class="nav-tab active" onclick="showSection('reserver')" id="tab-reserver">📅 Réserver</button>
         <button class="nav-tab" onclick="showSection('mes-resas')" id="tab-mes-resas">🎯 Mes réservations</button>
-        <button class="nav-tab" onclick="showSection('admin')" id="tab-admin" style="display:none">⚙️ Administration</button>
+		<button class="nav-tab" onclick="showSection('admin')" id="tab-admin" style="display:none">⚙️ <span class="tab-label-full">Administration</span><span class="tab-label-short" style="display:none">Admin</span></button>
       </div>
 
       <!-- RÉSERVER -->
@@ -501,7 +505,7 @@ border-radius:12px!important;
         <div class="nav-tabs" style="margin-bottom:20px">
           <button class="nav-tab active" onclick="showAdminTab('membres')" id="atab-membres">👥 Membres</button>
           <button class="nav-tab" onclick="showAdminTab('attente')" id="atab-attente">⏳ En attente</button>
-          <button class="nav-tab" onclick="showAdminTab('reservations')" id="atab-reservations">📋 Réservations</button>
+          <button class="nav-tab" onclick="showAdminTab('reservations')" id="atab-reservations">📋 <span class="tab-label-full">Réservations</span><span class="tab-label-short" style="display:none">Résa</span></button>
         </div>
         <div id="admin-membres"><div id="membres-content"><div class="loading"><div class="spinner"></div></div></div></div>
         <div id="admin-attente" style="display:none"><div id="attente-content"><div class="loading"><div class="spinner"></div></div></div></div>
